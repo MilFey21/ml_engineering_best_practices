@@ -1,0 +1,51 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# Virtual environments
+.venv
+venv
+env
+ENV
+.pixi
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Data (will be downloaded in container)
+data/
+
+# Tests
+tests/
+.pytest_cache
+
+# Documentation
+docs/site
+
+# Reports
+reports/figures
+
+# Jupyter
+.ipynb_checkpoints
+notebooks/
+
+# Logs
+*.log
+
+# Environment variables
+.env
