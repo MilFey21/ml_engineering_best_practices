@@ -1,9 +1,20 @@
 # Data
 /data/
+!data/**/*.dvc
+!data/**/*.gitignore
 
 # Models (large files)
 models/*.pkl
 models/*.joblib
+
+# DVC
+.dvc/cache
+.dvc/tmp
+.dvc/state
+dvc_storage/
+
+# MLflow
+mlruns/
 
 # Mac OS-specific storage files
 .DS_Store

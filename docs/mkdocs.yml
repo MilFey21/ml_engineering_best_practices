@@ -1,0 +1,7 @@
+site_name: ml_engineering_best_practices
+site_author: Your name (or your organization/company/team)
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Reproducibility: reproducibility.md

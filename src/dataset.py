@@ -88,12 +88,12 @@ def main(
         shutil.rmtree(temp_dir, ignore_errors=True)
 
     except Exception as e:
-        logger.error(f"Error downloading dataset: {e}")
-        logger.error("Make sure Kaggle API credentials are configured.")
-        logger.error("Options:")
-        logger.error("1. Set environment variables: KAGGLE_USERNAME and KAGGLE_KEY")
         logger.error(
-            "2. Place kaggle.json in ~/.kaggle/ (Linux/Mac) or C:\\Users\\<username>\\.kaggle\\ (Windows)"
+            f"""Error downloading dataset: {e}
+        Make sure Kaggle API credentials are configured.
+        Options:
+        1. Set environment variables: KAGGLE_USERNAME and KAGGLE_KEY
+        2. Place kaggle.json in ~/.kaggle/ (Linux/Mac) or C:\\Users\\<username>\\.kaggle\\ (Windows)"""
         )
         raise
 
