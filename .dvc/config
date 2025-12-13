@@ -1,5 +1,4 @@
-['remote "local"']
-    url = ./dvc_storage
-['core']
+[core]
     remote = local
-
+['remote "local"']
+    url = ../dvc_storage

@@ -14,6 +14,8 @@
 - Структурированная организация проекта по шаблону CookieCutter Data Science
 - Управление зависимостями через Pixi
 - Качество кода с использованием pre-commit hooks, форматирования и линтеров
+- Версионирование данных через DVC (Data Version Control)
+- Версионирование моделей через MLflow (Model Registry)
 - Контейнеризация с Docker
 - Полный ML pipeline от загрузки данных до обучения модели
 
@@ -111,10 +113,64 @@ export KAGGLE_KEY=your_key
 
 ### Использование Docker
 
+Проект включает Dockerfile для контейнеризации приложения. Docker-образ включает:
+- Все зависимости через Pixi
+- Исходный код проекта
+- Данные для обучения (копируются в образ)
+- Настроенное окружение DVC и MLflow
+
+**Сборка образа:**
 ```bash
 docker build -t churn-model .
-docker run churn-model
 ```
+
+**Запуск контейнера:**
+```bash
+# Обучение модели (контейнер удаляется после выполнения)
+docker run --rm churn-model
+
+# Запуск с пробросом порта для MLflow UI
+docker run -p 5000:5000 --rm churn-model pixi run mlflow-ui
+```
+
+**Примечание:** Данные копируются в образ при сборке. Если данные большие, рассмотрите использование volume mounts:
+```bash
+docker run --rm -v ${PWD}/data:/app/data churn-model
+```
+
+### Версионирование данных и моделей
+
+Проект использует **DVC** для версионирования данных и **MLflow** для версионирования моделей.
+
+**Инициализация DVC:**
+```bash
+pixi run dvc-init
+```
+
+**Версионирование данных:**
+```bash
+pixi run dvc-track-data  # Версионировать все данные
+pixi run dvc-push        # Отправить данные в remote storage
+pixi run dvc-pull        # Загрузить данные из remote storage
+```
+
+**Просмотр результатов в MLflow:**
+```bash
+pixi run mlflow-ui       # Запустить MLflow UI (http://localhost:5000)
+pixi run mlflow-list-runs  # Список всех запусков
+```
+
+**Сравнение моделей:**
+```bash
+# Через MLflow UI (рекомендуется)
+pixi run mlflow-ui
+# Откройте http://localhost:5000
+
+# Или через Python API
+pixi run python -c "import mlflow; mlflow.set_tracking_uri('file:./mlruns'); runs = mlflow.search_runs(experiment_names=['churn_prediction']); print(runs[['run_id', 'metrics.test_accuracy', 'metrics.test_f1_score']])"
+```
+
+Подробные инструкции см. в [документации](docs/docs/reproducibility.md)
 
 ### Дополнительные команды
 

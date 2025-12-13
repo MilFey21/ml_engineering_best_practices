@@ -1,9 +1,1 @@
-# DVC internal files
-cache
-tmp
-state
-state-journal
-state-wal
-lock
-config.local
-
+/config.local
