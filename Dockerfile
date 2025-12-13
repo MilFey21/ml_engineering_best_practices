@@ -42,4 +42,5 @@ EXPOSE 5000
 
 # Default command - run training using pixi's environment
 # Use pixi run train task which uses the correct Python environment
+# Can be overridden to run experiments: docker run churn-model pixi run experiments
 CMD ["pixi", "run", "train"]

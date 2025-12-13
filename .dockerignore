@@ -28,7 +28,7 @@ ENV
 *.swo
 
 # Data (will be copied into container)
-# data/  # Commented out to allow copying data into Docker image
+
 
 # Tests
 tests/
