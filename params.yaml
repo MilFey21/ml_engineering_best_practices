@@ -1,0 +1,7 @@
+# Parameters file for DVC pipeline
+# This file tracks parameters used in the pipeline
+
+config:
+  seed: 42
+  test_size: 0.2
+  random_state: 42

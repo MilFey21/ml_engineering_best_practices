@@ -1,0 +1,42 @@
+{
+  "total_stages_started": 3,
+  "total_stages_completed": 3,
+  "total_stages_failed": 0,
+  "total_duration_seconds": 33.2605721950531,
+  "success_rate": 1.0,
+  "events": [
+    {
+      "timestamp": "2025-12-21T20:10:37.949850",
+      "event": "stage_start",
+      "stage": "process_features"
+    },
+    {
+      "timestamp": "2025-12-21T20:10:46.551347",
+      "event": "stage_complete",
+      "stage": "process_features",
+      "duration_seconds": 8.601496696472168
+    },
+    {
+      "timestamp": "2025-12-21T20:10:46.552347",
+      "event": "stage_start",
+      "stage": "train_model"
+    },
+    {
+      "timestamp": "2025-12-21T20:11:04.237744",
+      "event": "stage_complete",
+      "stage": "train_model",
+      "duration_seconds": 17.685397148132324
+    },
+    {
+      "timestamp": "2025-12-21T20:11:04.240056",
+      "event": "stage_start",
+      "stage": "evaluate_model"
+    },
+    {
+      "timestamp": "2025-12-21T20:11:11.213734",
+      "event": "stage_complete",
+      "stage": "evaluate_model",
+      "duration_seconds": 6.973678350448608
+    }
+  ]
+}

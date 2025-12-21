@@ -3,7 +3,7 @@
 from contextlib import contextmanager
 import functools
 from pathlib import Path
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 from clearml import Logger, Task
 from loguru import logger
@@ -16,7 +16,7 @@ class ClearMLExperiment:
         self,
         project_name: str,
         task_name: str,
-        task_type: Task.TaskTypes = Task.TaskTypes.training,
+        task_type: Any = Task.TaskTypes.training,
         tags: Optional[list] = None,
     ):
         """Initialize ClearML experiment context manager.
@@ -42,6 +42,7 @@ class ClearMLExperiment:
             task_type=self.task_type,
             tags=self.tags,
         )
+        assert self.task is not None  # Task.init always returns a Task
         self.logger = self.task.get_logger()
         logger.info(f"Started ClearML experiment: {self.task_name} (ID: {self.task.id})")
         return self
@@ -191,7 +192,7 @@ class ClearMLExperiment:
 def clearml_experiment(
     project_name: str,
     task_name: Optional[str] = None,
-    task_type: Task.TaskTypes = Task.TaskTypes.training,
+    task_type: Any = Task.TaskTypes.training,
     tags: Optional[list] = None,
     log_params: bool = True,
     log_return_value: bool = False,
@@ -275,7 +276,7 @@ def compare_experiments(
     from clearml import Task
 
     # Get all tasks from the project
-    tasks = Task.get_tasks(project_name=project_name, task_filter=filters or {})
+    tasks: List[Any] = Task.get_tasks(project_name=project_name, task_filter=filters or {})
 
     results = []
     for task in tasks:
@@ -374,7 +375,7 @@ def search_experiments(
         task_filter["status"] = str(status)
 
     # Get tasks
-    tasks = Task.get_tasks(project_name=project_name, task_filter=task_filter)
+    tasks: List[Any] = Task.get_tasks(project_name=project_name, task_filter=task_filter)
 
     results = []
     for task in tasks:
@@ -399,7 +400,7 @@ def search_experiments(
 def clearml_context(
     project_name: str,
     task_name: str,
-    task_type: Task.TaskTypes = Task.TaskTypes.training,
+    task_type: Any = Task.TaskTypes.training,
     tags: Optional[list] = None,
 ):
     """Context manager for ClearML experiments (alias for ClearMLExperiment).

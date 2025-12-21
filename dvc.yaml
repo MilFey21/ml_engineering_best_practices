@@ -1,0 +1,53 @@
+stages:
+  download_data:
+    cmd: pixi run python src/dataset.py data/raw/customer_churn.csv
+    deps:
+      - src/dataset.py
+      - src/config.py
+    outs:
+      - data/raw/customer_churn.csv
+    metrics:
+      - metrics/data_download.json:
+          cache: false
+
+  process_features:
+    cmd: pixi run python src/features.py data/raw/customer_churn.csv data/processed/features.csv data/processed/labels.csv
+    deps:
+      - src/features.py
+      - src/config.py
+      - data/raw/customer_churn.csv
+    outs:
+      - data/processed/features.csv
+      - data/processed/labels.csv
+    metrics:
+      - metrics/features.json:
+          cache: false
+
+  train_model:
+    cmd: pixi run python src/modeling/train_with_config.py model=random_forest
+    deps:
+      - src/modeling/train_with_config.py
+      - src/config.py
+      - data/processed/features.csv
+      - data/processed/labels.csv
+      - configs/config.yaml
+      - configs/data/default.yaml
+      - configs/model/random_forest.yaml
+      - configs/training/default.yaml
+    outs:
+      - models/model.pkl
+    metrics:
+      - models/metrics.json:
+          cache: false
+
+  evaluate_model:
+    cmd: pixi run python src/modeling/evaluate.py models/model.pkl data/processed/features.csv data/processed/labels.csv reports/evaluation_report.json
+    deps:
+      - src/modeling/evaluate.py
+      - models/model.pkl
+      - data/processed/features.csv
+      - data/processed/labels.csv
+    metrics:
+      - reports/evaluation_report.json:
+          cache: false
+          persist: true

@@ -1,0 +1,11 @@
+# Logistic Regression model configuration
+name: logistic_regression
+type: LogisticRegression
+
+# Hyperparameters
+params:
+  C: 1.0
+  max_iter: 1000
+  class_weight: "balanced"
+  random_state: ${seed}
+  solver: "lbfgs"

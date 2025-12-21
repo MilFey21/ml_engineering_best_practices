@@ -1,7 +1,7 @@
 """Script for running multiple ML experiments with different models and hyperparameters using ClearML."""
 
 from pathlib import Path
-from typing import Any, Dict, cast
+from typing import Any, Dict, List, Optional, cast
 
 from clearml import Task
 import joblib
@@ -70,10 +70,10 @@ def train_and_log_experiment(
     features_path: Path,
     labels_path: Path,
     project_name: str = "Churn Prediction",
-    task_name: str = None,
+    task_name: Optional[str] = None,
     test_size: float = 0.2,
     random_state: int = 42,
-    tags: list = None,
+    tags: Optional[List[str]] = None,
 ):
     """Train a model and log experiment to ClearML using context manager."""
     # Generate task name if not provided

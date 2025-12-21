@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 import joblib
 from loguru import logger
@@ -35,7 +36,7 @@ def main(
     n_estimators: int = 100,
     max_depth: int = 8,
     experiment_name: str = "churn_prediction",
-    run_name: str = None,
+    run_name: Optional[str] = None,
 ):
     """Train a baseline Random Forest model for customer churn prediction."""
     # Set MLflow tracking URI (defaults to local ./mlruns)
@@ -150,8 +151,10 @@ def main(
         # Log model path
         mlflow.log_param("local_model_path", str(model_path))
 
-        run_id = mlflow.active_run().info.run_id
-        logger.info(f"MLflow run ID: {run_id}")
+        active_run = mlflow.active_run()
+        if active_run is not None:
+            run_id = active_run.info.run_id
+            logger.info(f"MLflow run ID: {run_id}")
 
     # Log metrics to console
     logger.info("=" * 50)
