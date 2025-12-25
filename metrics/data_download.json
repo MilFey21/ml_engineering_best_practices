@@ -1,3 +1,4 @@
 {
-  "status": "pulled_from_cache"
+  "status": "skipped",
+  "reason": "file_exists"
 }

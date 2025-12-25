@@ -150,6 +150,18 @@ mlflow-ui = "mlflow ui --backend-store-uri file:./mlruns --port 5000"
 
 # ClearML tasks
 clearml-setup = "python scripts/clearml_setup.py"
+clearml-server-start = "powershell -ExecutionPolicy Bypass -File scripts/clearml_server_start.ps1"
+clearml-server-start-unix = "bash scripts/clearml_server_start.sh"
+clearml-server-logs = "docker compose -f docker-compose.clearml.yml logs -f"
+
+# Churn prediction tasks
+churn-download = "python src/dataset.py data/raw/customer_churn.csv"
+churn-features = "python src/features.py data/raw/customer_churn.csv data/processed/features.csv data/processed/labels.csv"
+churn-train = "python src/modeling/train.py"
+churn-experiments = "python src/modeling/experiments.py"
+churn-data-versioning = "python src/churn_prediction/data_versioning.py"
+churn-model-registry = "python src/churn_prediction/model_registry.py"
+churn-pipeline = "python src/churn_prediction/pipeline.py"
 
 # Experiments
 experiments = "python src/modeling/experiments.py"
