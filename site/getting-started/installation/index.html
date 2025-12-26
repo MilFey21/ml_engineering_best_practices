@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Your name (or your organization/company/team)">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Установка и настройка - ml_engineering_best_practices</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">ml_engineering_best_practices</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../getting-started.md" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../reproducibility.md" class="nav-link">Reproducibility</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Установка и настройка</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link">Требования</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#pixi" class="nav-link">Установка Pixi</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_3" class="nav-link">Клонирование репозитория</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_4" class="nav-link">Установка зависимостей</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#kaggle-api" class="nav-link">Настройка Kaggle API</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#clearml" class="nav-link">Настройка ClearML (опционально)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#pre-commit-hooks" class="nav-link">Настройка Pre-commit Hooks</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_5" class="nav-link">Проверка установки</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_6" class="nav-link">Следующие шаги</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Установка и настройка</h1>
+<p>Это руководство поможет вам установить и настроить проект для предсказания оттока клиентов.</p>
+<h2 id="_2">Требования</h2>
+<ul>
+<li>Python 3.12+</li>
+<li>Git</li>
+<li><a href="https://pixi.sh">Pixi</a> (рекомендуется) или pip/conda</li>
+</ul>
+<h2 id="pixi">Установка Pixi</h2>
+<h3 id="windows">Windows</h3>
+<pre><code class="language-powershell"># Через winget
+winget install prefix-dev.pixi
+
+# Или через PowerShell
+iwr https://pixi.sh/install.ps1 | iex
+</code></pre>
+<h3 id="linuxmac">Linux/Mac</h3>
+<pre><code class="language-bash">curl -fsSL https://pixi.sh/install.sh | bash
+</code></pre>
+<h2 id="_3">Клонирование репозитория</h2>
+<pre><code class="language-bash">git clone https://github.com/your-username/ml_engineering_best_practices.git
+cd ml_engineering_best_practices
+</code></pre>
+<h2 id="_4">Установка зависимостей</h2>
+<h3 id="pixi_1">Использование Pixi (рекомендуется)</h3>
+<pre><code class="language-bash"># Установка всех зависимостей
+pixi install
+
+# Активация окружения
+pixi shell
+</code></pre>
+<h3 id="pip">Альтернатива: pip</h3>
+<pre><code class="language-bash"># Создание виртуального окружения
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# или
+venv\Scripts\activate  # Windows
+
+# Установка зависимостей
+pip install -r requirements.txt
+</code></pre>
+<h2 id="kaggle-api">Настройка Kaggle API</h2>
+<p>Для загрузки датасета необходимо настроить Kaggle API credentials:</p>
+<ol>
+<li>Создайте аккаунт на <a href="https://www.kaggle.com/">Kaggle</a> (если еще нет)</li>
+<li>Перейдите в <strong>Settings → API → Create New Token</strong></li>
+<li>Скачайте <code>kaggle.json</code></li>
+<li>Поместите файл в:</li>
+<li><strong>Windows</strong>: <code>C:\Users\&lt;username&gt;\.kaggle\kaggle.json</code></li>
+<li><strong>Linux/Mac</strong>: <code>~/.kaggle/kaggle.json</code></li>
+</ol>
+<p><strong>Важно:</strong> Установите правильные права доступа:</p>
+<pre><code class="language-bash"># Linux/Mac
+chmod 600 ~/.kaggle/kaggle.json
+</code></pre>
+<p><strong>Альтернатива:</strong> Используйте переменные окружения:</p>
+<pre><code class="language-bash">export KAGGLE_USERNAME=your_username
+export KAGGLE_KEY=your_key
+</code></pre>
+<h2 id="clearml">Настройка ClearML (опционально)</h2>
+<p>Для использования ClearML для отслеживания экспериментов:</p>
+<ol>
+<li>
+<p>Запустите локальный ClearML Server:
+   <code>bash
+   pixi run clearml-server-start</code></p>
+</li>
+<li>
+<p>Настройте credentials:
+   <code>bash
+   clearml-init</code></p>
+</li>
+<li>API Server: <code>http://localhost:8008</code></li>
+<li>Web UI: <code>http://localhost:8080</code></li>
+<li>Access Key и Secret Key: получите из Web UI (http://localhost:8080 → Settings → Workspace)</li>
+</ol>
+<p>Подробнее см. <a href="../../deployment/">Руководство по развертыванию</a>.</p>
+<h2 id="pre-commit-hooks">Настройка Pre-commit Hooks</h2>
+<p>Для автоматической проверки качества кода:</p>
+<pre><code class="language-bash">pixi run setup
+# или
+pre-commit install
+</code></pre>
+<h2 id="_5">Проверка установки</h2>
+<p>Проверьте, что все установлено правильно:</p>
+<pre><code class="language-bash"># Проверка версии Python
+python --version
+
+# Проверка установки зависимостей
+pixi run python -c &quot;import pandas, sklearn, clearml; print('All dependencies installed!')&quot;
+
+# Проверка структуры проекта
+pixi run python -c &quot;from src.config import PROJ_ROOT; print(f'Project root: {PROJ_ROOT}')&quot;
+</code></pre>
+<h2 id="_6">Следующие шаги</h2>
+<p>После успешной установки перейдите к <a href="../examples/">Примерам использования</a> или <a href="../../deployment/">Руководству по развертыванию</a>.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

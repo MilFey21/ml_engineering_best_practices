@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Your name (or your organization/company/team)">
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Примеры использования - ml_engineering_best_practices</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">ml_engineering_best_practices</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href="../.." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../getting-started.md" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../../reproducibility.md" class="nav-link">Reproducibility</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#_1" class="nav-link">Примеры использования</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#1" class="nav-link">Пример 1: Базовое обучение модели</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2-clearml" class="nav-link">Пример 2: Обучение с ClearML</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#3" class="nav-link">Пример 3: Запуск множественных экспериментов</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#4-hydra" class="nav-link">Пример 4: Использование Hydra для конфигурации</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#5-dvc" class="nav-link">Пример 5: Версионирование данных с DVC</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#6" class="nav-link">Пример 6: Регистрация модели в реестре</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#7" class="nav-link">Пример 7: Сравнение моделей</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#8-dvc-pipeline" class="nav-link">Пример 8: Использование DVC pipeline</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#9-clearml-pipeline" class="nav-link">Пример 9: Работа с ClearML Pipeline</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#10" class="nav-link">Пример 10: Предсказание на новых данных</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#11-clearml" class="nav-link">Пример 11: Использование контекстного менеджера ClearML</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="_1">Примеры использования</h1>
+<p>Здесь представлены примеры использования различных функций проекта.</p>
+<h2 id="1">Пример 1: Базовое обучение модели</h2>
+<pre><code class="language-python">from pathlib import Path
+from src.modeling.train import main
+
+# Обучение модели с параметрами по умолчанию
+main(
+    features_path=Path(&quot;data/processed/features.csv&quot;),
+    labels_path=Path(&quot;data/processed/labels.csv&quot;),
+    model_path=Path(&quot;models/model.pkl&quot;),
+    test_size=0.2,
+    random_state=42,
+    n_estimators=100,
+    max_depth=10,
+)
+</code></pre>
+<h2 id="2-clearml">Пример 2: Обучение с ClearML</h2>
+<pre><code class="language-python">from pathlib import Path
+from src.modeling.train import main
+
+# Обучение с логированием в ClearML
+main(
+    features_path=Path(&quot;data/processed/features.csv&quot;),
+    labels_path=Path(&quot;data/processed/labels.csv&quot;),
+    model_path=Path(&quot;models/model.pkl&quot;),
+    experiment_name=&quot;churn_prediction&quot;,
+    run_name=&quot;baseline_random_forest&quot;,
+)
+</code></pre>
+<h2 id="3">Пример 3: Запуск множественных экспериментов</h2>
+<pre><code class="language-python">from pathlib import Path
+from src.modeling.experiments import run_experiments
+
+# Запуск всех экспериментов
+run_experiments(
+    features_path=Path(&quot;data/processed/features.csv&quot;),
+    labels_path=Path(&quot;data/processed/labels.csv&quot;),
+    project_name=&quot;Churn Prediction Experiments&quot;,
+)
+</code></pre>
+<h2 id="4-hydra">Пример 4: Использование Hydra для конфигурации</h2>
+<pre><code class="language-bash"># Обучение Random Forest с конфигурацией
+pixi run python src/modeling/train_with_config.py model=random_forest
+
+# Обучение Gradient Boosting
+pixi run python src/modeling/train_with_config.py model=gradient_boosting
+
+# Переопределение параметров
+pixi run python src/modeling/train_with_config.py model=random_forest model.n_estimators=200 model.max_depth=15
+</code></pre>
+<h2 id="5-dvc">Пример 5: Версионирование данных с DVC</h2>
+<pre><code class="language-python">from src.churn_prediction.data_versioning import create_dataset_version
+from src.churn_prediction.config import ChurnPredictionConfig
+
+# Создание версии датасета в ClearML
+config = ChurnPredictionConfig()
+dataset_id = create_dataset_version(config, version=&quot;v1.0&quot;)
+print(f&quot;Dataset ID: {dataset_id}&quot;)
+</code></pre>
+<h2 id="6">Пример 6: Регистрация модели в реестре</h2>
+<pre><code class="language-python">from pathlib import Path
+from src.churn_prediction.model_registry import register_model
+
+# Регистрация модели
+model_id = register_model(
+    task_id=&quot;your-task-id&quot;,
+    model_path=Path(&quot;models/model.pkl&quot;),
+    model_name=&quot;churn_prediction_v1&quot;,
+    tags=[&quot;baseline&quot;, &quot;random_forest&quot;],
+)
+print(f&quot;Model ID: {model_id}&quot;)
+</code></pre>
+<h2 id="7">Пример 7: Сравнение моделей</h2>
+<pre><code class="language-python">from src.churn_prediction.model_registry import compare_models
+import json
+
+# Сравнение моделей по метрике F1-Score
+results = compare_models(
+    project_name=&quot;Churn Prediction&quot;,
+    metric_name=&quot;test_f1_score&quot;,
+    top_n=5,
+)
+
+print(json.dumps(results, indent=2, default=str))
+</code></pre>
+<h2 id="8-dvc-pipeline">Пример 8: Использование DVC pipeline</h2>
+<pre><code class="language-bash"># Запуск всего pipeline через DVC
+pixi run dvc-repro
+
+# Запуск конкретного этапа
+pixi run dvc-repro train_model
+
+# Просмотр графа зависимостей
+pixi run dvc-dag
+</code></pre>
+<h2 id="9-clearml-pipeline">Пример 9: Работа с ClearML Pipeline</h2>
+<pre><code class="language-python">from src.churn_prediction.pipeline import main
+
+# Создание и запуск пайплайна обучения
+main()
+</code></pre>
+<h2 id="10">Пример 10: Предсказание на новых данных</h2>
+<pre><code class="language-python">import joblib
+import pandas as pd
+from pathlib import Path
+from src.features import create_features
+
+# Загрузка модели
+model = joblib.load(&quot;models/model.pkl&quot;)
+
+# Загрузка новых данных
+new_data = pd.read_csv(&quot;data/raw/new_customers.csv&quot;)
+
+# Создание признаков (используя ту же логику, что и при обучении)
+features = create_features(new_data)
+
+# Предсказание
+predictions = model.predict(features)
+probabilities = model.predict_proba(features)
+
+# Сохранение результатов
+results = pd.DataFrame({
+    'customer_id': new_data['customerID'],
+    'churn_prediction': predictions,
+    'churn_probability': probabilities[:, 1]
+})
+results.to_csv(&quot;predictions.csv&quot;, index=False)
+</code></pre>
+<h2 id="11-clearml">Пример 11: Использование контекстного менеджера ClearML</h2>
+<pre><code class="language-python">from src.modeling.clearml_utils import clearml_context
+from src.modeling.train import train_model
+
+# Обучение с автоматическим логированием
+with clearml_context(
+    project_name=&quot;Churn Prediction&quot;,
+    task_name=&quot;experiment_1&quot;,
+    tags=[&quot;baseline&quot;, &quot;random_forest&quot;],
+) as exp:
+    # Логирование параметров
+    exp.log_params({
+        &quot;n_estimators&quot;: 100,
+        &quot;max_depth&quot;: 10,
+        &quot;random_state&quot;: 42,
+    })
+
+    # Обучение модели
+    metrics = train_model(...)
+
+    # Логирование метрик
+    exp.log_metrics(metrics)
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
