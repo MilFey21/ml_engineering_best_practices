@@ -26,7 +26,7 @@ class ChurnPredictionConfig:
     random_state: int = 42
 
     # ClearML settings
-    clearml_project: str = "Churn Prediction"
+    clearml_project: str = "Churn Prediction Experiments"
     clearml_task_type: str = "training"
 
     def __post_init__(self):

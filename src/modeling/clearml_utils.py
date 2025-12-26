@@ -105,61 +105,92 @@ class ClearMLExperiment:
         import tempfile
 
         import matplotlib.pyplot as plt
+        import numpy as np
         import seaborn as sns
 
-        if self.logger:
-            # Create confusion matrix as table
-            if class_names is None:
-                class_names = [f"Class {i}" for i in range(len(cm))]
+        if not self.logger:
+            return
 
-            # Log as table
+        # Set default class names if not provided
+        if class_names is None:
+            class_names = [f"Class {i}" for i in range(len(cm))]
+
+        # Ensure cm is numpy array
+        cm = np.array(cm)
+
+        # Try to use report_confusion_matrix if available (ClearML native method)
+        try:
+            # Check if report_confusion_matrix method exists
+            if hasattr(self.logger, 'report_confusion_matrix'):
+                self.logger.report_confusion_matrix(
+                    title=title,
+                    series="Confusion Matrix",
+                    matrix=cm.tolist(),
+                    xaxis="Predicted Label",
+                    yaxis="True Label",
+                    iteration=0,
+                )
+                logger.info(f"Logged confusion matrix using report_confusion_matrix: {title}")
+                return
+        except Exception as e:
+            logger.debug(f"report_confusion_matrix not available: {e}")
+
+        # Fallback: Log as image (heatmap) - use "Plots" title for better visibility in ClearML UI
+        fig, ax = plt.subplots(figsize=(10, 8))
+        sns.heatmap(
+            cm,
+            annot=True,
+            fmt="d",
+            cmap="Blues",
+            xticklabels=class_names,
+            yticklabels=class_names,
+            cbar_kws={"label": "Count"},
+            ax=ax,
+            square=True,
+            linewidths=0.5,
+        )
+        ax.set_title(title, fontsize=14, fontweight='bold')
+        ax.set_ylabel("True Label", fontsize=12)
+        ax.set_xlabel("Predicted Label", fontsize=12)
+        plt.tight_layout()
+
+        # Save to temporary file and log
+        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp_file:
+            tmp_path = Path(tmp_file.name)
+            plt.savefig(tmp_path, dpi=150, bbox_inches="tight")
+            plt.close()
+
+            # Log image - use "Plots" title for better visibility in ClearML UI
+            self.logger.report_image(
+                title="Plots",  # Use "Plots" as title for better visibility
+                series=title,   # Use actual title as series name
+                iteration=0,
+                local_path=str(tmp_path),
+            )
+
+            # Also log as table for data access - use "Tables" title for better visibility
             table_data = []
+            # Add header row
+            header = [""] + [str(name) for name in class_names]
+            table_data.append(header)
+            # Add data rows
             for i, row in enumerate(cm):
-                table_data.append([class_names[i]] + row.tolist())
+                table_data.append([class_names[i]] + [int(val) for val in row.tolist()])
 
             self.logger.report_table(
-                title=title,
-                series="Confusion Matrix",
+                title="Tables",  # Use "Tables" as title for better visibility
+                series=title,
                 table_plot=table_data,
                 iteration=0,
             )
 
-            # Create and log as image (heatmap)
-            fig, ax = plt.subplots(figsize=(8, 6))
-            sns.heatmap(
-                cm,
-                annot=True,
-                fmt="d",
-                cmap="Blues",
-                xticklabels=class_names,
-                yticklabels=class_names,
-                cbar_kws={"label": "Count"},
-                ax=ax,
-            )
-            ax.set_title(title)
-            ax.set_ylabel("True Label")
-            ax.set_xlabel("Predicted Label")
-            plt.tight_layout()
+            # Clean up temporary file
+            try:
+                tmp_path.unlink()
+            except Exception:
+                pass
 
-            # Save to temporary file and log
-            with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp_file:
-                tmp_path = Path(tmp_file.name)
-                plt.savefig(tmp_path, dpi=150, bbox_inches="tight")
-                plt.close()
-
-                # Log image
-                self.logger.report_image(
-                    title=title,
-                    series="Confusion Matrix",
-                    iteration=0,
-                    local_path=str(tmp_path),
-                )
-
-                # Clean up
-                try:
-                    tmp_path.unlink()
-                except Exception:
-                    pass
+        logger.info(f"Logged confusion matrix as image and table: {title}")
 
     def log_model(self, name: str, model_path: Path):
         """Upload model to ClearML.
@@ -277,6 +308,7 @@ def compare_experiments(
 
     # Get all tasks from the project
     tasks: List[Any] = Task.get_tasks(project_name=project_name, task_filter=filters or {})
+    logger.info(f"Found {len(tasks)} tasks in project '{project_name}'")
 
     results = []
     for task in tasks:
@@ -287,12 +319,16 @@ def compare_experiments(
             # Structure: {"Metrics": {"metric_name": {"last": value}}}
             scalar_metrics = task.get_last_scalar_metrics()
             if scalar_metrics:
+                logger.debug(f"Task {task.id} ({task.name}) has scalar metrics: {list(scalar_metrics.keys())}")
                 for title, series_dict in scalar_metrics.items():
                     if isinstance(series_dict, dict) and metric_name in series_dict:
                         value_dict = series_dict[metric_name]
                         if isinstance(value_dict, dict) and "last" in value_dict:
                             metric_value = value_dict["last"]
+                            logger.debug(f"Found metric {metric_name}={metric_value} for task {task.id} in scalar metrics")
                             break
+            else:
+                logger.debug(f"Task {task.id} ({task.name}) has no scalar metrics")
 
             # Method 2: Try to get from configuration/parameters (from task.connect)
             if metric_value is None:
@@ -335,15 +371,22 @@ def compare_experiments(
                             "status": task.status,
                         }
                     )
+                    logger.debug(f"Added task {task.id} ({task.name}) with {metric_name}={metric_value}")
                 except (ValueError, TypeError):
                     logger.warning(
                         f"Metric {metric_name} for task {task.id} is not numeric: {metric_value}"
                     )
+            else:
+                logger.debug(f"Task {task.id} ({task.name}) has no metric {metric_name}")
         except Exception as e:
             logger.warning(f"Failed to get metrics for task {task.id}: {e}")
+            import traceback
+            logger.debug(traceback.format_exc())
 
     # Sort by metric value
     results.sort(key=lambda x: x.get(metric_name, 0), reverse=True)
+    
+    logger.info(f"Found {len(results)} tasks with metric {metric_name}, returning top {top_n}")
 
     return results[:top_n]
 

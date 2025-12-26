@@ -1,163 +1,126 @@
-# Инструкция по настройке проекта
+# Начало работы
 
-## Быстрая настройка
+Это руководство поможет вам установить и настроить проект для предсказания оттока клиентов.
 
-### 1. Установка Pixi (если еще не установлен)
+## Требования
 
-**Windows (PowerShell):**
+- Python 3.12+
+- Git
+- [Pixi](https://pixi.sh) (рекомендуется) или pip/conda
+- Docker (опционально, для ClearML Server)
+
+## Установка Pixi
+
+### Windows
+
 ```powershell
-iwr https://pixi.sh/install.ps1 -useb | iex
+iwr https://pixi.sh/install.ps1 | iex
 ```
 
-**Linux/Mac:**
+### Linux/Mac
+
 ```bash
 curl -fsSL https://pixi.sh/install.sh | bash
 ```
 
-### 2. Установка зависимостей проекта
+## Клонирование репозитория
 
 ```bash
+git clone https://github.com/MilFey21/ml_engineering_best_practices.git
+cd ml_engineering_best_practices
+```
+
+## Установка зависимостей
+
+```bash
+# Установка всех зависимостей
 pixi install
-```
 
-или
-
-```bash
-pixi run requirements
-```
-
-или (если установлен make):
-
-```bash
-make requirements
-```
-
-### 3. Активация окружения
-
-```bash
+# Активация окружения
 pixi shell
 ```
 
-### 4. Настройка pre-commit hooks
+## Настройка Kaggle API
 
-```bash
-pixi run setup
-```
+Для загрузки датасета необходимо настроить Kaggle API credentials:
 
-Это автоматически установит зависимости и настроит pre-commit hooks.
-
-Или вручную:
-```bash
-pixi run pre-commit install
-```
-
-Проверка работы hooks:
-```bash
-pixi run pre-commit run --all-files
-```
-
-### 5. Настройка Kaggle API (для загрузки данных)
-
-Для загрузки датасета с Kaggle необходимо настроить API credentials:
-
-1. Создайте аккаунт на Kaggle (если еще нет)
-2. Перейдите в Settings -> API -> Create New Token
+1. Создайте аккаунт на [Kaggle](https://www.kaggle.com/)
+2. Перейдите в **Settings → API → Create New Token**
 3. Скачайте `kaggle.json`
 4. Поместите файл в `~/.kaggle/kaggle.json` (Linux/Mac) или `C:\Users\<username>\.kaggle\kaggle.json` (Windows)
 
-**Альтернатива:** Можно использовать переменные окружения:
+**Альтернатива:** Используйте переменные окружения:
+
 ```bash
 export KAGGLE_USERNAME=your_username
 export KAGGLE_KEY=your_key
 ```
 
-### 6. Запуск ML Pipeline
+## Настройка ClearML (опционально)
 
-**Полный pipeline (кроссплатформенно):**
 ```bash
-pixi run pipeline
+# Запуск локального ClearML Server
+pixi run clearml-server-start
+
+# Настройка credentials
+clearml-init
 ```
 
-**Пошагово:**
+При настройке укажите:
+- **API Server**: `http://localhost:8008`
+- **Web UI**: `http://localhost:8080`
+- **Access Key** и **Secret Key**: получите из Web UI
+
+## Примеры использования
+
+### Базовое обучение модели
+
 ```bash
+# Полный pipeline
+pixi run pipeline
+
+# Или пошагово
 pixi run data      # Загрузка данных
 pixi run features  # Создание признаков
 pixi run train     # Обучение модели
 ```
 
-**Альтернатива (если установлен make):**
-```bash
-make pipeline
-```
-
-### 7. Форматирование и линтинг кода
-
-**Форматирование (кроссплатформенно):**
-```bash
-pixi run format
-```
-
-**Проверка линтинга:**
-```bash
-pixi run lint
-```
-
-**Альтернатива (если установлен make):**
-```bash
-make format
-make lint
-```
-
-### 8. Запуск тестов
+### Запуск экспериментов
 
 ```bash
-pixi run test
+# Запуск множественных экспериментов
+pixi run churn-experiments
+
+# Сравнение моделей
+pixi run churn-model-registry compare --metric-name test_f1_score --top-n 5
 ```
 
-**Альтернатива (если установлен make):**
+### Генерация отчетов
+
 ```bash
-make test
+# Генерация отчета об экспериментах
+pixi run generate-report
+
+# Генерация всех отчетов
+pixi run generate-all-reports
 ```
 
-### 9. Просмотр всех доступных задач
+### Использование DVC
 
 ```bash
-pixi task list
+# Инициализация DVC
+pixi run dvc-init
+
+# Версионирование данных
+pixi run dvc-track-data
+
+# Воспроизведение pipeline
+pixi run dvc-repro
 ```
 
-### 9. Использование Docker
+## Следующие шаги
 
-**Сборка образа:**
-```bash
-docker build -t churn-model .
-```
+- [Руководство по развертыванию](deployment.md)
+- [Результаты экспериментов](experiments/results.md)
+- [Воспроизводимость](reproducibility/instructions.md)
 
-**Запуск контейнера:**
-```bash
-docker run churn-model
-```
-
-## Структура команд Makefile
-
-Запустите `make help` для просмотра всех доступных команд.
-
-## Troubleshooting
-
-### Проблема с Kaggle API
-Если возникают проблемы с загрузкой данных, убедитесь что:
-- Файл `kaggle.json` находится в правильной директории
-- Права доступа к файлу корректны (Linux/Mac: `chmod 600 ~/.kaggle/kaggle.json`)
-- Учетные данные действительны
-
-### Проблема с Pixi
-Если `pixi` не найден, добавьте путь в PATH:
-```bash
-export PATH="$HOME/.pixi/bin:$PATH"
-```
-
-### Проблема с pre-commit
-Если pre-commit не работает, попробуйте:
-```bash
-pre-commit clean
-pre-commit install --install-hooks
-```

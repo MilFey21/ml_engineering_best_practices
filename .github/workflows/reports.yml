@@ -1,0 +1,47 @@
+name: Generate Reports
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'scripts/**'
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday
+
+jobs:
+  generate-reports:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          pip install pandas loguru clearml
+
+      - name: Generate reports
+        run: |
+          python scripts/generate_all_reports.py
+        env:
+          CLEARML_API_HOST: ${{ secrets.CLEARML_API_HOST }}
+          CLEARML_FILES_HOST: ${{ secrets.CLEARML_FILES_HOST }}
+          CLEARML_WEB_HOST: ${{ secrets.CLEARML_WEB_HOST }}
+          CLEARML_API_ACCESS_KEY: ${{ secrets.CLEARML_API_ACCESS_KEY }}
+          CLEARML_API_SECRET_KEY: ${{ secrets.CLEARML_API_SECRET_KEY }}
+
+      - name: Commit reports
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add reports/*.md
+          git diff --staged --quiet || git commit -m "Auto-generate experiment reports [skip ci]"
+          git push
+

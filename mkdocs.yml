@@ -1,0 +1,75 @@
+site_name: ML Engineering Best Practices - Churn Prediction
+site_description: Полная документация проекта предсказания оттока клиентов
+site_author: ITMO ML Engineering Course
+site_url: https://your-username.github.io/ml_engineering_best_practices/
+
+# Repository (обновите на ваш репозиторий)
+repo_name: ml_engineering_best_practices
+repo_url: https://github.com/your-username/ml_engineering_best_practices
+edit_uri: edit/main/docs/docs/
+
+# Copyright
+copyright: Copyright &copy; 2025 ITMO ML Engineering Course
+
+# Theme
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - content.code.copy
+  icon:
+    repo: fontawesome/brands/github
+
+# Plugins
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_source: true
+
+# Extensions
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - toc:
+      permalink: true
+
+# Navigation
+nav:
+  - Home: index.md
+  - Установка и настройка: getting-started/installation.md
+  - Примеры использования: getting-started/examples.md
+  - Руководство по развертыванию: deployment.md
+  - Результаты экспериментов: experiments/results.md
+  - Воспроизводимость: reproducibility/instructions.md

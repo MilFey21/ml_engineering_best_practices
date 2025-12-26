@@ -1,27 +1,83 @@
-# ml_engineering_best_practices
+# ML Engineering Best Practices - Churn Prediction
 
 <a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
 
+[![Documentation](https://img.shields.io/badge/docs-mkdocs-blue)](https://your-username.github.io/ml_engineering_best_practices/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 ## Telco Customer Churn Prediction
 
 Проект для предсказания оттока клиентов телекоммуникационной компании на основе датасета [Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) с Kaggle.
 
-### Описание проекта
+## 📚 Документация
 
-Этот проект демонстрирует применение современных инженерных практик в Data Science:
-- Структурированная организация проекта по шаблону CookieCutter Data Science
-- Управление зависимостями через Pixi
-- Качество кода с использованием pre-commit hooks, форматирования и линтеров
-- Версионирование данных через DVC (Data Version Control)
-- Версионирование моделей через MLflow (Model Registry)
-- Контейнеризация с Docker
-- Полный ML pipeline от загрузки данных до обучения модели
+Полная документация проекта доступна на [GitHub Pages](https://your-username.github.io/ml_engineering_best_practices/).
 
-### Baseline Модель
+Для локального просмотра документации:
 
-#### Архитектура модели
+```bash
+# Сборка документации
+pixi run docs-build
+
+# Локальный просмотр
+pixi run docs-serve
+```
+
+Откройте http://127.0.0.1:8000 в браузере.
+
+## 🚀 Быстрый старт
+
+### Предварительные требования
+
+- Python 3.12+
+- Git
+- [Pixi](https://pixi.sh) (рекомендуется) или pip/conda
+
+### Установка
+
+1. **Клонирование репозитория:**
+   ```bash
+   git clone https://github.com/your-username/ml_engineering_best_practices.git
+   cd ml_engineering_best_practices
+   ```
+
+2. **Установка зависимостей:**
+   ```bash
+   pixi install
+   pixi shell
+   ```
+
+3. **Настройка Kaggle API:**
+   - Создайте файл `~/.kaggle/kaggle.json` с вашими credentials
+   - Установите права доступа: `chmod 600 ~/.kaggle/kaggle.json`
+
+4. **Запуск pipeline:**
+   ```bash
+   pixi run pipeline
+   ```
+
+Подробные инструкции см. в [документации](https://your-username.github.io/ml_engineering_best_practices/getting-started/installation/).
+
+## 📖 Описание проекта
+
+Этот проект демонстрирует применение современных инженерных практик в Data Science и Machine Learning:
+
+- 🏗️ **Структурированная организация проекта** по шаблону CookieCutter Data Science
+- 📦 **Управление зависимостями** через Pixi
+- ✅ **Качество кода** с использованием pre-commit hooks, форматирования и линтеров
+- 📊 **Версионирование данных** через DVC (Data Version Control)
+- 🤖 **Версионирование моделей** через ClearML Model Registry
+- 🐳 **Контейнеризация** с Docker
+- 🔄 **Полный ML pipeline** от загрузки данных до обучения модели
+- 📈 **Отслеживание экспериментов** через ClearML
+- 📚 **Автоматическая документация** через MkDocs
+- 🔁 **CI/CD** через GitHub Actions
+
+## 🎯 Baseline Модель
+
+### Архитектура модели
 
 Проект реализует **baseline модель** для предсказания оттока клиентов на основе алгоритма **Random Forest Classifier** из библиотеки scikit-learn.
 
@@ -50,201 +106,265 @@
    - Сохранение важности признаков в CSV для анализа
    - Детальное логирование метрик и confusion matrix
 
-#### Метрики модели
+### Поддерживаемые модели
 
-Результаты обучения baseline модели представлены на скриншоте ниже:
+Проект поддерживает следующие модели машинного обучения:
 
-![Classification Report](reports/figures/classification_report.png)
+- Random Forest
+- Gradient Boosting
+- Logistic Regression
+- SVM (Support Vector Machine)
+- K-Nearest Neighbors
+- Decision Tree
+- AdaBoost
+- Naive Bayes
 
-Модель показывает неплохие результаты на задаче предсказания оттока клиентов и может быть использована как отправная точка для дальнейшего улучшения.
+## 🔧 Использование
 
-### Быстрый старт
+### Запуск полного pipeline
 
-1. **Установка зависимостей:**
+```bash
+pixi run pipeline
+```
+
+### Пошаговое выполнение
+
+```bash
+pixi run data      # Загрузка данных
+pixi run features  # Создание признаков
+pixi run train     # Обучение модели
+```
+
+### Запуск экспериментов
+
+```bash
+# Запуск всех экспериментов
+pixi run churn-experiments
+
+# Просмотр результатов
+pixi run churn-model-registry
+
+# Сравнение моделей
+pixi run churn-model-registry compare --metric-name test_f1_score --top-n 5
+```
+
+### Генерация отчетов
+
+```bash
+# Генерация отчета об экспериментах (с графиками)
+pixi run generate-report
+
+# Генерация без графиков
+pixi run generate-report --no-plots
+
+# Генерация всех отчетов
+pixi run generate-all-reports
+```
+
+**Особенности отчетов:**
+- Автоматическое скачивание графиков из ClearML
+- Визуализация метрик обучения и confusion matrix
+- Сравнительные таблицы топовых моделей
+- Сохранение графиков в `reports/experiments/plots/`
+
+## 📊 Результаты экспериментов
+
+Результаты экспериментов доступны в:
+
+- **ClearML UI** (если настроен): http://localhost:8080
+- **Отчеты**: `reports/experiments/experiment_report.md`
+- **Документация**: [Эксперименты](https://your-username.github.io/ml_engineering_best_practices/experiments/overview/)
+
+## 🔄 Воспроизводимость
+
+### Воспроизведение результатов
+
+Для воспроизведения результатов проекта:
+
+1. **Клонируйте репозиторий:**
+   ```bash
+   git clone https://github.com/your-username/ml_engineering_best_practices.git
+   cd ml_engineering_best_practices
+   ```
+
+2. **Установите зависимости:**
    ```bash
    pixi install
-   # или
-   pixi run requirements
    ```
 
-2. **Активация окружения:**
-   ```bash
-   pixi shell
-   ```
+3. **Настройте окружение:**
+   - Настройте Kaggle API (см. [Установка](#установка))
+   - Опционально: настройте ClearML Server (см. [Документация](https://your-username.github.io/ml_engineering_best_practices/deployment/clearml/))
 
-3. **Запуск полного pipeline:**
+4. **Запустите pipeline:**
    ```bash
    pixi run pipeline
    ```
 
-   Или пошагово:
+5. **Запустите эксперименты:**
    ```bash
-   pixi run data      # Загрузка данных
-   pixi run features  # Создание признаков
-   pixi run train     # Обучение модели
+   pixi run churn-experiments
    ```
 
-**Альтернатива:** Используйте `make` команды (если установлен):
+### Версионирование данных
+
+Проект использует DVC для версионирования данных:
+
 ```bash
-make pipeline
+# Инициализация DVC
+pixi run dvc-init
+
+# Версионирование данных
+pixi run dvc-track-data
+
+# Загрузка данных
+pixi run dvc-pull
+
+# Воспроизведение pipeline
+pixi run dvc-repro
 ```
 
-**Просмотр всех доступных задач:**
+### Версионирование моделей
+
+Проект использует ClearML для версионирования моделей:
+
 ```bash
-pixi task list
+# Версионирование данных
+pixi run churn-data-versioning
+
+# Регистрация моделей
+pixi run churn-model-registry register models/model.pkl --model-name my_model
+
+# Просмотр моделей
+pixi run churn-model-registry
 ```
 
-### Настройка Kaggle API
+Подробные инструкции см. в [документации по воспроизводимости](https://your-username.github.io/ml_engineering_best_practices/reproducibility/instructions/).
 
-Для загрузки датасета необходимо настроить Kaggle API credentials:
+## 🐳 Docker
 
-1. Создайте аккаунт на [Kaggle](https://www.kaggle.com/) (если еще нет)
-2. Перейдите в Settings -> API -> Create New Token
-3. Скачайте `kaggle.json`
-4. Поместите файл в:
-   - **Windows**: `C:\Users\<username>\.kaggle\kaggle.json`
-   - **Linux/Mac**: `~/.kaggle/kaggle.json`
+### Сборка образа
 
-**Альтернатива:** Используйте переменные окружения:
-```bash
-export KAGGLE_USERNAME=your_username
-export KAGGLE_KEY=your_key
-```
-
-### Использование Docker
-
-Проект включает Dockerfile для контейнеризации приложения. Docker-образ включает:
-- Все зависимости через Pixi
-- Исходный код проекта
-- Данные для обучения (копируются в образ)
-- Настроенное окружение DVC и MLflow
-
-**Сборка образа:**
 ```bash
 docker build -t churn-model .
 ```
 
-**Запуск контейнера:**
+### Запуск контейнера
+
 ```bash
-# Обучение модели (контейнер удаляется после выполнения)
+# Запуск полного pipeline
 docker run --rm churn-model
 
 # Запуск с пробросом порта для MLflow UI
 docker run -p 5000:5000 --rm churn-model pixi run mlflow-ui
 ```
 
-**Примечание:** Данные копируются в образ при сборке. Если данные большие, рассмотрите использование volume mounts:
-```bash
-docker run --rm -v ${PWD}/data:/app/data churn-model
+Подробнее см. [Docker развертывание](https://your-username.github.io/ml_engineering_best_practices/deployment/docker/).
+
+## 📁 Структура проекта
+
+```
+ml_engineering_best_practices/
+├── .github/
+│   └── workflows/          # GitHub Actions workflows
+├── data/
+│   ├── external/           # Данные из внешних источников
+│   ├── interim/            # Промежуточные данные
+│   ├── processed/          # Обработанные данные для моделирования
+│   └── raw/                # Исходные данные
+├── docs/
+│   └── docs/               # Исходники документации MkDocs
+├── models/                  # Обученные модели
+├── notebooks/               # Jupyter notebooks
+├── reports/                 # Отчеты и визуализации
+│   ├── figures/            # Графики и изображения
+│   └── *.md                # Отчеты в формате Markdown
+├── scripts/                 # Вспомогательные скрипты
+├── src/                     # Исходный код
+│   ├── churn_prediction/   # Модули для предсказания оттока
+│   ├── modeling/            # Модули для моделирования
+│   ├── dataset.py          # Загрузка датасета
+│   └── features.py         # Создание признаков
+├── .github/workflows/       # GitHub Actions
+├── docker-compose.clearml.yml  # Docker Compose для ClearML
+├── mkdocs.yml              # Конфигурация MkDocs
+├── pyproject.toml          # Конфигурация проекта
+└── README.md               # Этот файл
 ```
 
-### Версионирование данных и моделей
+## 🛠️ Разработка
 
-Проект использует **DVC** для версионирования данных и **MLflow** для версионирования моделей.
-
-**Инициализация DVC:**
-```bash
-pixi run dvc-init
-```
-
-**Версионирование данных:**
-```bash
-pixi run dvc-track-data  # Версионировать все данные
-pixi run dvc-push        # Отправить данные в remote storage
-pixi run dvc-pull        # Загрузить данные из remote storage
-```
-
-**Просмотр результатов в MLflow:**
-```bash
-pixi run mlflow-ui       # Запустить MLflow UI (http://localhost:5000)
-pixi run mlflow-list-runs  # Список всех запусков
-```
-
-**Сравнение моделей:**
-```bash
-# Через MLflow UI (рекомендуется)
-pixi run mlflow-ui
-# Откройте http://localhost:5000
-
-# Или через Python API
-pixi run python -c "import mlflow; mlflow.set_tracking_uri('file:./mlruns'); runs = mlflow.search_runs(experiment_names=['churn_prediction']); print(runs[['run_id', 'metrics.test_accuracy', 'metrics.test_f1_score']])"
-```
-
-Подробные инструкции см. в [документации](docs/docs/reproducibility.md)
-
-### Дополнительные команды
-
-Все команды доступны через `pixi run` (кроссплатформенно):
+### Установка зависимостей для разработки
 
 ```bash
-pixi run format      # Форматирование кода
-pixi run lint        # Проверка линтинга
-pixi run test        # Запуск тестов
-pixi run clean       # Очистка временных файлов
-pixi run setup       # Первоначальная настройка (установка зависимостей + pre-commit)
+pixi install
+pixi run setup  # Установка зависимостей + pre-commit hooks
 ```
 
-**Альтернатива:** Используйте `make` команды (если установлен):
+### Проверка качества кода
+
 ```bash
-make format
-make lint
-make test
+pixi run format  # Форматирование кода
+pixi run lint    # Проверка линтинга
 ```
 
-**Просмотр всех доступных задач:**
+### Тестирование
+
 ```bash
-pixi task list
+pixi run test    # Запуск тестов
 ```
 
-## Project Organization
+### Документация
 
+```bash
+pixi run docs-build   # Сборка документации
+pixi run docs-serve   # Локальный просмотр документации
+pixi run docs-deploy  # Публикация документации на GitHub Pages
 ```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands (опционально, для совместимости)
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── docs               <- A default mkdocs project; see www.mkdocs.org for details
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for
-│                         src and configuration for tools like black
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
-│
-└── src   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes src a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    ├── modeling
-    │   ├── __init__.py
-    │   ├── predict.py          <- Code to run model inference with trained models
-    │   └── train.py            <- Code to train models
-    │
-    └── plots.py                <- Code to create visualizations
-```
+
+## 📝 Отчеты
+
+Отчеты по домашним заданиям доступны в директории `reports/`:
+
+- [HW1 Report](reports/hw1_report.md)
+- [HW2 Report](reports/hw2_report.md)
+- [HW3 Report](reports/hw3_report.md)
+- [HW4 Report](reports/hw4_report.md)
+- [HW5 Report](reports/hw5_report.md)
+- [Experiment Report](reports/experiments/experiment_report.md) - автоматически генерируемый отчет
+
+## 🤝 Вклад
+
+Проект создан в рамках курса ML Engineering в ITMO.
+
+## 📄 Лицензия
+
+Проект создан в образовательных целях.
+
+## 🔗 Полезные ссылки
+
+- [Документация проекта](https://your-username.github.io/ml_engineering_best_practices/)
+- [Kaggle Dataset](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
+- [ClearML Documentation](https://clear.ml/docs)
+- [DVC Documentation](https://dvc.org/doc)
+- [Pixi Documentation](https://pixi.sh)
+- [MkDocs Documentation](https://www.mkdocs.org/)
+
+## ⚠️ Важные замечания
+
+- **Воспроизводимость**: Все эксперименты используют `random_state=42` для обеспечения воспроизводимости
+- **Данные**: Убедитесь, что данные загружены перед запуском обучения (`pixi run data`)
+- **ClearML**: Для использования ClearML необходимо запустить локальный сервер (`pixi run clearml-server-start`)
+- **Документация**: Документация автоматически публикуется на GitHub Pages при каждом push в main ветку
+
+## 📞 Поддержка
+
+Если у вас возникли вопросы или проблемы:
+
+1. Проверьте [документацию](https://your-username.github.io/ml_engineering_best_practices/)
+2. Изучите [примеры использования](https://your-username.github.io/ml_engineering_best_practices/getting-started/examples/)
+3. Проверьте [инструкции по воспроизведению](https://your-username.github.io/ml_engineering_best_practices/reproducibility/instructions/)
 
 --------
+
+**Проект создан в рамках курса ML Engineering в ITMO**
