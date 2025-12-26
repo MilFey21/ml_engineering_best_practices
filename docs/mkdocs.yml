@@ -1,6 +1,6 @@
 site_name: ml_engineering_best_practices
 site_author: MilFey21
-site_url: https://MilFey21.github.io/ml_engineering_best_practices/
+site_url: https://milfey21.github.io/ml_engineering_best_practices/
 repo_url: https://github.com/MilFey21/ml_engineering_best_practices
 repo_name: MilFey21/ml_engineering_best_practices
 
@@ -64,7 +64,7 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          paths: [src]
+          paths: [../src]
           options:
             docstring_style: google
             show_source: true

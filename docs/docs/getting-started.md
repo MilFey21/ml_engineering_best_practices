@@ -123,4 +123,3 @@ pixi run dvc-repro
 - [Руководство по развертыванию](deployment.md)
 - [Результаты экспериментов](experiments/results.md)
 - [Воспроизводимость](reproducibility/instructions.md)
-

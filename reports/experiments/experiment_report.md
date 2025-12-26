@@ -105,4 +105,3 @@ To reproduce these results:
 1. Ensure ClearML Server is running: `pixi run clearml-server-start`
 2. Run experiments: `pixi run churn-experiments`
 3. View results in ClearML UI: http://localhost:8080
-

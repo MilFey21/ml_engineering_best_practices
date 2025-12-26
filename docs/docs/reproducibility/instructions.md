@@ -154,4 +154,3 @@ docker run --rm churn-model
 - [Руководство по развертыванию](../deployment.md)
 - [Результаты экспериментов](../experiments/results.md)
 - [Начало работы](../getting-started.md)
-

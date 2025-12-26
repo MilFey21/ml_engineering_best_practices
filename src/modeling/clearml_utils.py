@@ -121,7 +121,7 @@ class ClearMLExperiment:
         # Try to use report_confusion_matrix if available (ClearML native method)
         try:
             # Check if report_confusion_matrix method exists
-            if hasattr(self.logger, 'report_confusion_matrix'):
+            if hasattr(self.logger, "report_confusion_matrix"):
                 self.logger.report_confusion_matrix(
                     title=title,
                     series="Confusion Matrix",
@@ -149,7 +149,7 @@ class ClearMLExperiment:
             square=True,
             linewidths=0.5,
         )
-        ax.set_title(title, fontsize=14, fontweight='bold')
+        ax.set_title(title, fontsize=14, fontweight="bold")
         ax.set_ylabel("True Label", fontsize=12)
         ax.set_xlabel("Predicted Label", fontsize=12)
         plt.tight_layout()
@@ -163,7 +163,7 @@ class ClearMLExperiment:
             # Log image - use "Plots" title for better visibility in ClearML UI
             self.logger.report_image(
                 title="Plots",  # Use "Plots" as title for better visibility
-                series=title,   # Use actual title as series name
+                series=title,  # Use actual title as series name
                 iteration=0,
                 local_path=str(tmp_path),
             )
@@ -319,13 +319,17 @@ def compare_experiments(
             # Structure: {"Metrics": {"metric_name": {"last": value}}}
             scalar_metrics = task.get_last_scalar_metrics()
             if scalar_metrics:
-                logger.debug(f"Task {task.id} ({task.name}) has scalar metrics: {list(scalar_metrics.keys())}")
+                logger.debug(
+                    f"Task {task.id} ({task.name}) has scalar metrics: {list(scalar_metrics.keys())}"
+                )
                 for title, series_dict in scalar_metrics.items():
                     if isinstance(series_dict, dict) and metric_name in series_dict:
                         value_dict = series_dict[metric_name]
                         if isinstance(value_dict, dict) and "last" in value_dict:
                             metric_value = value_dict["last"]
-                            logger.debug(f"Found metric {metric_name}={metric_value} for task {task.id} in scalar metrics")
+                            logger.debug(
+                                f"Found metric {metric_name}={metric_value} for task {task.id} in scalar metrics"
+                            )
                             break
             else:
                 logger.debug(f"Task {task.id} ({task.name}) has no scalar metrics")
@@ -371,7 +375,9 @@ def compare_experiments(
                             "status": task.status,
                         }
                     )
-                    logger.debug(f"Added task {task.id} ({task.name}) with {metric_name}={metric_value}")
+                    logger.debug(
+                        f"Added task {task.id} ({task.name}) with {metric_name}={metric_value}"
+                    )
                 except (ValueError, TypeError):
                     logger.warning(
                         f"Metric {metric_name} for task {task.id} is not numeric: {metric_value}"
@@ -381,11 +387,12 @@ def compare_experiments(
         except Exception as e:
             logger.warning(f"Failed to get metrics for task {task.id}: {e}")
             import traceback
+
             logger.debug(traceback.format_exc())
 
     # Sort by metric value
     results.sort(key=lambda x: x.get(metric_name, 0), reverse=True)
-    
+
     logger.info(f"Found {len(results)} tasks with metric {metric_name}, returning top {top_n}")
 
     return results[:top_n]

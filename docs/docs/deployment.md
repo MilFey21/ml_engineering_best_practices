@@ -34,7 +34,7 @@ pixi shell
    ```bash
    # Полный pipeline
    pixi run pipeline
-   
+
    # Или пошагово
    pixi run data
    pixi run features
@@ -163,4 +163,3 @@ docker-compose -f docker-compose.clearml.yml down
 ### Проблема: Сервер не запускается
 
 **Решение:** Проверьте логи: `pixi run clearml-server-logs` и убедитесь, что порты не заняты.
-

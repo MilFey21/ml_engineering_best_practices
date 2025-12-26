@@ -167,9 +167,9 @@ churn-model-registry = "python src/churn_prediction/model_registry.py"
 churn-pipeline = "python src/churn_prediction/pipeline.py"
 
 # Documentation
-docs-build = "mkdocs build"
-docs-serve = "mkdocs serve -a 127.0.0.1:8001"
-docs-deploy = "mkdocs gh-deploy --force"
+docs-build = "cd docs && mkdocs build"
+docs-serve = "cd docs && mkdocs serve -a 127.0.0.1:8001"
+docs-deploy = "cd docs && mkdocs gh-deploy --force"
 
 # Reports
 generate-report = "python scripts/generate_experiment_report.py"
