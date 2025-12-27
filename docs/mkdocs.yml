@@ -6,6 +6,7 @@ repo_name: MilFey21/ml_engineering_best_practices
 
 docs_dir: docs
 site_dir: site
+use_directory_urls: true
 
 theme:
   name: material

@@ -6,7 +6,7 @@
 
 ## Выполненные требования
 
-### 1. Техническая документация
+### 1. Техническая документация 
 
 #### ✅ Создана документация с помощью MkDocs
 
@@ -25,9 +25,10 @@
 #### ✅ Создано руководство по развертыванию
 
 Созданы подробные руководства:
-- [Локальное развертывание](https://MilFey21.github.io/ml_engineering_best_practices/deployment/local/)
-- [Docker развертывание](https://MilFey21.github.io/ml_engineering_best_practices/deployment/docker/)
-- [ClearML Server](https://MilFey21.github.io/ml_engineering_best_practices/deployment/clearml/)
+- [Руководство по развертыванию](https://milfey21.github.io/ml_engineering_best_practices/deployment/) - включает локальное развертывание, Docker и ClearML Server
+- [Начало работы](https://milfey21.github.io/ml_engineering_best_practices/getting-started/) - установка и примеры использования
+- [Результаты экспериментов](https://milfey21.github.io/ml_engineering_best_practices/experiments/results/) - отчеты и визуализации
+- [Воспроизводимость](https://milfey21.github.io/ml_engineering_best_practices/reproducibility/instructions/) - инструкции по воспроизведению результатов
 
 #### ✅ Настроена автоматическая генерация документации
 
@@ -40,6 +41,8 @@
 ![Report](figures/docs_serve.png)
 
 ![Report](figures/docs_local.png)
+
+![Report](figures/docs_experiments.png)
 
 #### ✅ Созданы примеры использования
 
@@ -124,7 +127,7 @@ pixi run generate-report
 - Отчетах в формате Markdown (автоматически скачиваются и встраиваются)
 
 ![Report](figures/confusion_matrix.png)
-![Combined Metrics Plot](experiments/plots/task_2b3b32dc864447598265f00e706d39e7/combined_metrics.png)
+![Combined Metrics Plot](experiments\plots\task_c276b00d12ce42c0841653fc0c9a11e9\combined_metrics.png)
 
 **Функциональность графиков:**
 - Автоматическое скачивание графиков метрик из топовых экспериментов
@@ -152,7 +155,7 @@ pixi run generate-report        # Генерация одного отчета
 pixi run generate-all-reports   # Генерация всех отчетов
 ```
 
-### 4. Воспроизводимость
+### 4. Воспроизводимость 
 
 #### ✅ Созданы инструкции по воспроизведению
 
@@ -266,3 +269,6 @@ pixi run generate-all-reports
 1. **Документация** - автоматически публикуется при изменениях
 2. **Отчеты** - автоматически генерируются при изменениях в коде или по расписанию
 3. **Воспроизводимость** - все инструкции включены в документацию
+
+
+
