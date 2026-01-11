@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import Optional
 
 import joblib
 from loguru import logger
@@ -18,7 +19,7 @@ from sklearn.metrics import (
 from sklearn.model_selection import train_test_split
 import typer
 
-from src.config import MODELS_DIR
+from src.config import MODELS_DIR, PROCESSED_DATA_DIR
 
 app = typer.Typer()
 
@@ -27,15 +28,15 @@ MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
 @app.command()
 def main(
-    features_path: Path = Path("/app/data/processed") / "features.csv",
-    labels_path: Path = Path("/app/data/processed") / "labels.csv",
+    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
+    labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
     model_path: Path = MODELS_DIR / "model.pkl",
     test_size: float = 0.2,
     random_state: int = 42,
     n_estimators: int = 100,
     max_depth: int = 8,
     experiment_name: str = "churn_prediction",
-    run_name: str = None,
+    run_name: Optional[str] = None,
 ):
     """Train a baseline Random Forest model for customer churn prediction."""
     # Set MLflow tracking URI (defaults to local ./mlruns)
@@ -150,8 +151,10 @@ def main(
         # Log model path
         mlflow.log_param("local_model_path", str(model_path))
 
-        run_id = mlflow.active_run().info.run_id
-        logger.info(f"MLflow run ID: {run_id}")
+        active_run = mlflow.active_run()
+        if active_run is not None:
+            run_id = active_run.info.run_id
+            logger.info(f"MLflow run ID: {run_id}")
 
     # Log metrics to console
     logger.info("=" * 50)

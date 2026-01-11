@@ -1,0 +1,14 @@
+# Random Forest model configuration
+name: random_forest
+type: RandomForestClassifier
+
+# Hyperparameters
+params:
+  n_estimators: 100
+  max_depth: 8
+  min_samples_split: 2
+  min_samples_leaf: 1
+  max_features: "sqrt"
+  class_weight: "balanced"
+  random_state: ${seed}
+  n_jobs: -1

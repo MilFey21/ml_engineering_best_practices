@@ -1,0 +1,69 @@
+data:
+  raw_data_path: data/raw/customer_churn.csv
+  features_path: data/processed/features.csv
+  labels_path: data/processed/labels.csv
+  processing:
+    test_size: 0.2
+    random_state: 42
+    stratify: true
+  features:
+    drop_columns:
+    - customerID
+    target_column: Churn
+    categorical_columns:
+    - gender
+    - Partner
+    - Dependents
+    - PhoneService
+    - MultipleLines
+    - InternetService
+    - OnlineSecurity
+    - OnlineBackup
+    - DeviceProtection
+    - TechSupport
+    - StreamingTV
+    - StreamingMovies
+    - Contract
+    - PaperlessBilling
+    - PaymentMethod
+model:
+  name: random_forest
+  type: RandomForestClassifier
+  params:
+    n_estimators: 100
+    max_depth: 8
+    min_samples_split: 2
+    min_samples_leaf: 1
+    max_features: sqrt
+    class_weight: balanced
+    random_state: ${seed}
+    n_jobs: -1
+training:
+  model_path: models/model.pkl
+  metrics_path: models/metrics.json
+  mlflow:
+    enabled: true
+    tracking_uri: file:./mlruns
+    experiment_name: churn_prediction
+    run_name: null
+  evaluation:
+    metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+    - roc_auc
+    save_report: true
+    report_path: reports/evaluation_report.json
+project:
+  name: churn_prediction
+  version: 1.0.0
+paths:
+  data_dir: data
+  models_dir: models
+  reports_dir: reports
+  metrics_dir: metrics
+seed: 42
+logging:
+  level: INFO
+  format: '{time} | {level} | {message}'

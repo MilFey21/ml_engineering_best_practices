@@ -1,0 +1,31 @@
+# Default data configuration
+raw_data_path: data/raw/customer_churn.csv
+features_path: data/processed/features.csv
+labels_path: data/processed/labels.csv
+
+# Data processing parameters
+processing:
+  test_size: 0.2
+  random_state: 42
+  stratify: true
+
+# Feature engineering
+features:
+  drop_columns: ["customerID"]
+  target_column: "Churn"
+  categorical_columns:
+    - "gender"
+    - "Partner"
+    - "Dependents"
+    - "PhoneService"
+    - "MultipleLines"
+    - "InternetService"
+    - "OnlineSecurity"
+    - "OnlineBackup"
+    - "DeviceProtection"
+    - "TechSupport"
+    - "StreamingTV"
+    - "StreamingMovies"
+    - "Contract"
+    - "PaperlessBilling"
+    - "PaymentMethod"

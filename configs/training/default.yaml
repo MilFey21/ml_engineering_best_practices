@@ -1,0 +1,24 @@
+# Default training configuration
+# Model saving
+model_path: models/model.pkl
+
+# Metrics
+metrics_path: models/metrics.json
+
+# MLflow settings
+mlflow:
+  enabled: true
+  tracking_uri: "file:./mlruns"
+  experiment_name: "churn_prediction"
+  run_name: null  # Will be auto-generated if null
+
+# Evaluation
+evaluation:
+  metrics:
+    - accuracy
+    - precision
+    - recall
+    - f1_score
+    - roc_auc
+  save_report: true
+  report_path: reports/evaluation_report.json

@@ -14,13 +14,16 @@ PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 @app.command()
 def main(
-    input_path: Path = RAW_DATA_DIR / "customer_churn.csv",
-    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
-    labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
+    input_path: str = typer.Argument(default=str(RAW_DATA_DIR / "customer_churn.csv")),
+    features_path: str = typer.Argument(default=str(PROCESSED_DATA_DIR / "features.csv")),
+    labels_path: str = typer.Argument(default=str(PROCESSED_DATA_DIR / "labels.csv")),
 ):
     """Process raw data and create features for modeling."""
-    logger.info(f"Loading data from {input_path}...")
-    df = pd.read_csv(input_path)
+    input_path_obj = Path(input_path)
+    features_path_obj = Path(features_path)
+    labels_path_obj = Path(labels_path)
+    logger.info(f"Loading data from {input_path_obj}...")
+    df = pd.read_csv(input_path_obj)
 
     logger.info(f"Original data shape: {df.shape}")
     logger.info(f"Columns: {list(df.columns)}")
@@ -45,8 +48,8 @@ def main(
 
         # Encode target: Yes -> 1, No -> 0
         y = (y == "Yes").astype(int)
-        y.to_csv(labels_path, index=False)
-        logger.info(f"Labels saved to {labels_path}")
+        y.to_csv(labels_path_obj, index=False)
+        logger.info(f"Labels saved to {labels_path_obj}")
         logger.info(f"Churn distribution:\n{y.value_counts()}")
     else:
         logger.warning("Churn column not found. Skipping label creation.")
@@ -79,13 +82,29 @@ def main(
     logger.info(f"Feature columns: {list(df_encoded.columns)}")
 
     # Save features
-    df_encoded.to_csv(features_path, index=False)
-    logger.success(f"Features saved to {features_path}")
+    df_encoded.to_csv(features_path_obj, index=False)
+    logger.success(f"Features saved to {features_path_obj}")
 
     if y is not None:
         logger.info(
             f"Features and labels ready for modeling. Features: {df_encoded.shape}, Labels: {y.shape}"
         )
+
+    # Create metrics file for DVC
+    metrics_file = Path("metrics/features.json")
+    metrics_file.parent.mkdir(parents=True, exist_ok=True)
+    import json
+
+    metrics_data = {
+        "features_shape": list(df_encoded.shape),
+        "feature_columns": list(df_encoded.columns),
+        "categorical_columns": categorical_cols,
+        "numerical_columns": numerical_cols,
+    }
+    if y is not None:
+        metrics_data["labels_shape"] = list(y.shape)
+        metrics_data["churn_distribution"] = y.value_counts().to_dict()
+    metrics_file.write_text(json.dumps(metrics_data, indent=2))
 
 
 if __name__ == "__main__":

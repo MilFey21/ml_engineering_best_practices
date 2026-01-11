@@ -1,0 +1,121 @@
+schema: '2.0'
+stages:
+  download_data:
+    cmd: pixi run python src/dataset.py data/raw/customer_churn.csv
+    deps:
+    - path: src/config.py
+      hash: md5
+      md5: db02e94f7ce11f4cce82e9f00dd62475
+      size: 851
+    - path: src/dataset.py
+      hash: md5
+      md5: b35c10d3ecda10aa08ccf68642fafd0d
+      size: 5699
+    outs:
+    - path: data/raw/customer_churn.csv
+      hash: md5
+      md5: 7f07de26b054de4c36eed95a1277fe21
+      size: 978285
+    - path: metrics/data_download.json
+      hash: md5
+      md5: 81a038ad7c5d98346c4b91653af147a3
+      size: 37
+  process_features:
+    cmd: pixi run python src/features.py data/raw/customer_churn.csv
+      data/processed/features.csv data/processed/labels.csv
+    deps:
+    - path: data/raw/customer_churn.csv
+      hash: md5
+      md5: 7f07de26b054de4c36eed95a1277fe21
+      size: 978285
+    - path: src/config.py
+      hash: md5
+      md5: db02e94f7ce11f4cce82e9f00dd62475
+      size: 851
+    - path: src/features.py
+      hash: md5
+      md5: 4230fceea20f3b61c43e9c1134058c9c
+      size: 3988
+    outs:
+    - path: data/processed/features.csv
+      hash: md5
+      md5: afc0a7728910f6acf5c9bc92ad81a81b
+      size: 340695
+    - path: data/processed/labels.csv
+      hash: md5
+      md5: 47b28afa61abed698521fb6194ae89ed
+      size: 21136
+    - path: metrics/features.json
+      hash: md5
+      md5: 9f27409f2fd7aee348231b925b5be7a9
+      size: 1035
+  train_model:
+    cmd: pixi run python src/modeling/train_with_config.py model=random_forest
+    deps:
+    - path: configs/config.yaml
+      hash: md5
+      md5: 70fc70a62165bbf8213d5aabceea28af
+      size: 438
+    - path: configs/data/default.yaml
+      hash: md5
+      md5: 8a7718625c72a8bdbb411d99d5338395
+      size: 706
+    - path: configs/model/random_forest.yaml
+      hash: md5
+      md5: d1a0f128bdc20fc8a80b1d1d16dbd538
+      size: 293
+    - path: configs/training/default.yaml
+      hash: md5
+      md5: faa39a3f7742ee5ee82f98a99be5aab5
+      size: 486
+    - path: data/processed/features.csv
+      hash: md5
+      md5: afc0a7728910f6acf5c9bc92ad81a81b
+      size: 340695
+    - path: data/processed/labels.csv
+      hash: md5
+      md5: 47b28afa61abed698521fb6194ae89ed
+      size: 21136
+    - path: src/config.py
+      hash: md5
+      md5: db02e94f7ce11f4cce82e9f00dd62475
+      size: 851
+    - path: src/modeling/train_with_config.py
+      hash: md5
+      md5: d755ec9fce6085910641a8789745ebb1
+      size: 6287
+    outs:
+    - path: models/metrics.json
+      hash: md5
+      md5: 78c3eca314e7092bda2131321643a24b
+      size: 241
+    - path: models/model.pkl
+      hash: md5
+      md5: 7f518e0d71a7b18a4a5a28fa645f42ad
+      size: 2916041
+  evaluate_model:
+    cmd: pixi run python src/modeling/evaluate.py models/model.pkl
+      data/processed/features.csv data/processed/labels.csv
+      reports/evaluation_report.json
+    deps:
+    - path: data/processed/features.csv
+      hash: md5
+      md5: afc0a7728910f6acf5c9bc92ad81a81b
+      size: 340695
+    - path: data/processed/labels.csv
+      hash: md5
+      md5: 47b28afa61abed698521fb6194ae89ed
+      size: 21136
+    - path: models/model.pkl
+      hash: md5
+      md5: 7f518e0d71a7b18a4a5a28fa645f42ad
+      size: 2916041
+    - path: src/modeling/evaluate.py
+      hash: md5
+      md5: 14d34048c519dedcf2c46e5413c6616c
+      size: 2900
+    outs:
+    - path: reports/evaluation_report.json
+      hash: md5
+      md5: bac590de8684323d6b48435b747d6ddc
+      size: 1043
