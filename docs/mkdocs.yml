@@ -61,11 +61,6 @@ nav:
       - api/utils.md
   - Experiments:
       - experiments/results.md
-      - Результаты экспериментов:
-          - experiments/results/experiment_report.md
-          - experiments/results/experiment_report_summary_20251226_212741.md
-          - experiments/results/experiment_report_accuracy_20251226_212741.md
-          - experiments/results/experiment_report_f1_20251226_212741.md
   - Reproducibility:
       - reproducibility/instructions.md
 

@@ -43,9 +43,13 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Install dependencies
+      - name: Install mkdocs dependencies
         run: |
           pip install mkdocs mkdocs-material mkdocstrings[python] pymdown-extensions
+
+      - name: Install project dependencies
+        run: |
+          pip install numpy==1.26.4 pandas==2.2.1 scikit-learn==1.4.2 joblib matplotlib seaborn loguru typer pydantic hydra-core omegaconf
 
       - name: Copy experiment reports
         run: |
