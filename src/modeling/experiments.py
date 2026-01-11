@@ -1,15 +1,15 @@
 """Script for running multiple ML experiments with different models and hyperparameters using ClearML."""
 
 from pathlib import Path
+import tempfile
 from typing import Any, Dict, List, Optional, cast
 
 from clearml import Task
 import joblib
 from loguru import logger
-import pandas as pd
 import matplotlib.pyplot as plt
+import pandas as pd
 import seaborn as sns
-import tempfile
 from sklearn.ensemble import (
     AdaBoostClassifier,
     GradientBoostingClassifier,
@@ -167,9 +167,15 @@ def train_and_log_experiment(
                 test_f1_iter = f1_score(y_test, y_test_pred_iter)
 
                 # Log metrics for this iteration/epoch directly
-                logger_instance.report_scalar("Metrics", "train_accuracy", train_acc_iter, iteration=iteration)
-                logger_instance.report_scalar("Metrics", "test_accuracy", test_acc_iter, iteration=iteration)
-                logger_instance.report_scalar("Metrics", "test_f1_score", test_f1_iter, iteration=iteration)
+                logger_instance.report_scalar(
+                    "Metrics", "train_accuracy", train_acc_iter, iteration=iteration
+                )
+                logger_instance.report_scalar(
+                    "Metrics", "test_accuracy", test_acc_iter, iteration=iteration
+                )
+                logger_instance.report_scalar(
+                    "Metrics", "test_f1_score", test_f1_iter, iteration=iteration
+                )
 
                 # Log progress periodically
                 if iteration % log_frequency == 0 or iteration == n_iterations:
@@ -232,7 +238,9 @@ def train_and_log_experiment(
         logger.info(f"Final metrics: {metrics}")
         # Log final metrics directly
         for metric_name, metric_value in metrics.items():
-            logger_instance.report_scalar("Metrics", metric_name, metric_value, iteration=final_iteration)
+            logger_instance.report_scalar(
+                "Metrics", metric_name, metric_value, iteration=final_iteration
+            )
         task.connect(metrics)
 
         # Log confusion matrix
@@ -272,12 +280,17 @@ def train_and_log_experiment(
             ax.set_ylabel("True Label")
             ax.set_xlabel("Predicted Label")
             plt.tight_layout()
-            
+
             with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp_file:
                 tmp_path = Path(tmp_file.name)
                 plt.savefig(tmp_path, dpi=150, bbox_inches="tight")
                 plt.close()
-                logger_instance.report_image("Plots", f"Confusion Matrix - {exp_task_name}", iteration=final_iteration, local_path=str(tmp_path))
+                logger_instance.report_image(
+                    "Plots",
+                    f"Confusion Matrix - {exp_task_name}",
+                    iteration=final_iteration,
+                    local_path=str(tmp_path),
+                )
                 tmp_path.unlink()
 
         # Log feature importance (if available)

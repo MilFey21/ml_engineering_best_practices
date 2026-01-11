@@ -1,0 +1,128 @@
+schema: '2.0'
+stages:
+  download_data:
+    cmd: pixi run python src/dataset.py data/raw/customer_churn.csv
+    outs:
+    - path: data/raw/customer_churn.csv
+      hash: md5
+      md5: 7f07de26b054de4c36eed95a1277fe21
+      size: 978285
+  create_features:
+    cmd: pixi run python src/features.py data/raw/customer_churn.csv 
+      data/processed/features.csv data/processed/labels.csv
+    deps:
+    - path: data/raw/customer_churn.csv
+      hash: md5
+      md5: 7f07de26b054de4c36eed95a1277fe21
+      size: 978285
+    - path: src/features.py
+      hash: md5
+      md5: dfbeb9070008b6f66cd7579969e8b0c5
+      size: 3303
+    outs:
+    - path: data/processed/features.csv
+      hash: md5
+      md5: afc0a7728910f6acf5c9bc92ad81a81b
+      size: 340695
+    - path: data/processed/labels.csv
+      hash: md5
+      md5: 47b28afa61abed698521fb6194ae89ed
+      size: 21136
+  train_rf:
+    cmd: pixi run python src/modeling/train_with_hydra.py model=random_forest
+    deps:
+    - path: configs/model/random_forest.yaml
+      hash: md5
+      md5: b02444074dfe5d8222e547b3b4829111
+      size: 302
+    - path: configs/training/default.yaml
+      hash: md5
+      md5: bce22c1a5e4b1151bf70d449485dca4b
+      size: 189
+    - path: data/processed/features.csv
+      hash: md5
+      md5: afc0a7728910f6acf5c9bc92ad81a81b
+      size: 340695
+    - path: data/processed/labels.csv
+      hash: md5
+      md5: 47b28afa61abed698521fb6194ae89ed
+      size: 21136
+    - path: src/modeling/train_with_hydra.py
+      hash: md5
+      md5: f6366e0b5a531a6135f380a77f0de70a
+      size: 5825
+    outs:
+    - path: models/rf_metrics.json
+      hash: md5
+      md5: 78c3eca314e7092bda2131321643a24b
+      size: 241
+    - path: models/rf_model.pkl
+      hash: md5
+      md5: 7f518e0d71a7b18a4a5a28fa645f42ad
+      size: 2916041
+  train_lr:
+    cmd: pixi run python src/modeling/train_with_hydra.py 
+      model=logistic_regression
+    deps:
+    - path: configs/model/logistic_regression.yaml
+      hash: md5
+      md5: a61e78c716105c776abb4cad9b764078
+      size: 285
+    - path: configs/training/default.yaml
+      hash: md5
+      md5: bce22c1a5e4b1151bf70d449485dca4b
+      size: 189
+    - path: data/processed/features.csv
+      hash: md5
+      md5: afc0a7728910f6acf5c9bc92ad81a81b
+      size: 340695
+    - path: data/processed/labels.csv
+      hash: md5
+      md5: 47b28afa61abed698521fb6194ae89ed
+      size: 21136
+    - path: src/modeling/train_with_hydra.py
+      hash: md5
+      md5: f6366e0b5a531a6135f380a77f0de70a
+      size: 5825
+    outs:
+    - path: models/lr_metrics.json
+      hash: md5
+      md5: d513593824e5ea2592c0ecd7a172856e
+      size: 242
+    - path: models/lr_model.pkl
+      hash: md5
+      md5: ad200b9c2e9bb82255679765e524d94c
+      size: 1567
+  train_gb:
+    cmd: pixi run python src/modeling/train_with_hydra.py 
+      model=gradient_boosting
+    deps:
+    - path: configs/model/gradient_boosting.yaml
+      hash: md5
+      md5: 48a371522111da9d355e6b95bb2ff83d
+      size: 292
+    - path: configs/training/default.yaml
+      hash: md5
+      md5: bce22c1a5e4b1151bf70d449485dca4b
+      size: 189
+    - path: data/processed/features.csv
+      hash: md5
+      md5: afc0a7728910f6acf5c9bc92ad81a81b
+      size: 340695
+    - path: data/processed/labels.csv
+      hash: md5
+      md5: 47b28afa61abed698521fb6194ae89ed
+      size: 21136
+    - path: src/modeling/train_with_hydra.py
+      hash: md5
+      md5: f6366e0b5a531a6135f380a77f0de70a
+      size: 5825
+    outs:
+    - path: models/gb_metrics.json
+      hash: md5
+      md5: 3d6cd891536d8131374e8bfc0364783b
+      size: 240
+    - path: models/gb_model.pkl
+      hash: md5
+      md5: 0944d148415290c794a482b60ab9804b
+      size: 434364

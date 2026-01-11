@@ -75,7 +75,7 @@ features: data
 ## Train model
 .PHONY: train
 train: features
-	$(PYTHON_INTERPRETER) src/modeling/train.py
+	$(PYTHON_INTERPRETER) src/modeling/train_with_hydra.py model=random_forest
 
 ## Full pipeline: data -> features -> train
 .PHONY: pipeline

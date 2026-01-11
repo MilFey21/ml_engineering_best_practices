@@ -14,9 +14,9 @@ PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 @app.command()
 def main(
-    input_path: Path = RAW_DATA_DIR / "customer_churn.csv",
-    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
-    labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
+    input_path: Path = typer.Argument(RAW_DATA_DIR / "customer_churn.csv", help="Path to input CSV file"),
+    features_path: Path = typer.Argument(PROCESSED_DATA_DIR / "features.csv", help="Path to output features CSV file"),
+    labels_path: Path = typer.Argument(PROCESSED_DATA_DIR / "labels.csv", help="Path to output labels CSV file"),
 ):
     """Process raw data and create features for modeling."""
     logger.info(f"Loading data from {input_path}...")

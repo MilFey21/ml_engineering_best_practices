@@ -1,0 +1,70 @@
+stages:
+  # Этап 1: Загрузка данных
+  download_data:
+    cmd: pixi run python src/dataset.py data/raw/customer_churn.csv  
+    deps: []
+    outs:
+      - data/raw/customer_churn.csv
+
+  # Этап 2: Создание признаков (зависит от загрузки данных)
+  create_features:
+    cmd: pixi run python src/features.py data/raw/customer_churn.csv data/processed/features.csv data/processed/labels.csv
+    deps:
+      - data/raw/customer_churn.csv
+      - src/features.py
+    outs:
+      - data/processed/features.csv
+      - data/processed/labels.csv
+
+  # Этап 3: Обучение модели Random Forest (зависит от признаков)
+  train_rf:
+    cmd: pixi run python src/modeling/train_with_hydra.py model=random_forest
+    deps:
+      - data/processed/features.csv
+      - data/processed/labels.csv
+      - src/modeling/train_with_hydra.py
+      - configs/model/random_forest.yaml
+      - configs/training/default.yaml
+    outs:
+      - models/rf_model.pkl
+      - models/rf_metrics.json
+
+  # Этап 4: Обучение модели Logistic Regression (зависит от признаков, но независим от train_rf)
+  # Этот этап может выполняться параллельно с train_rf
+  train_lr:
+    cmd: pixi run python src/modeling/train_with_hydra.py model=logistic_regression
+    deps:
+      - data/processed/features.csv
+      - data/processed/labels.csv
+      - src/modeling/train_with_hydra.py
+      - configs/model/logistic_regression.yaml
+      - configs/training/default.yaml
+    outs:
+      - models/lr_model.pkl
+      - models/lr_metrics.json
+
+  # Этап 5: Обучение модели Gradient Boosting (зависит от признаков, но независим от train_rf и train_lr)
+  # Этот этап может выполняться параллельно с train_rf и train_lr
+  train_gb:
+    cmd: pixi run python src/modeling/train_with_hydra.py model=gradient_boosting
+    deps:
+      - data/processed/features.csv
+      - data/processed/labels.csv
+      - src/modeling/train_with_hydra.py
+      - configs/model/gradient_boosting.yaml
+      - configs/training/default.yaml
+    outs:
+      - models/gb_model.pkl
+      - models/gb_metrics.json
+
+  # Этап 6: Сравнение моделей (зависит от всех обученных моделей)
+  compare_models:
+    cmd: pixi run python src/modeling/compare_models.py
+    deps:
+      - models/rf_metrics.json
+      - models/lr_metrics.json
+      - models/gb_metrics.json
+      - src/modeling/compare_models.py
+    outs:
+      - reports/model_comparison.json
+      - reports/model_comparison.md

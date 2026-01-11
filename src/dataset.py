@@ -1,23 +1,23 @@
 import os
 from pathlib import Path
+from typing import Optional
 
-from kaggle.api.kaggle_api_extended import KaggleApi
 from loguru import logger
 import pandas as pd
 import typer
 
 from src.config import RAW_DATA_DIR
 
-app = typer.Typer()
+app = typer.Typer(rich_markup_mode=None)
 
 RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 
 @app.command()
 def main(
-    output_path: Path = RAW_DATA_DIR / "customer_churn.csv",
-    kaggle_username: str = None,
-    kaggle_key: str = None,
+    output_path: Path,
+    kaggle_username: Optional[str] = None,
+    kaggle_key: Optional[str] = None,
 ):
     """Download Telco Customer Churn dataset from Kaggle.
 
@@ -26,8 +26,12 @@ def main(
     """
     logger.info("Downloading Telco Customer Churn dataset from Kaggle...")
 
+    # Lazy import to allow CLI help without Kaggle installed
+    from kaggle.api.kaggle_api_extended import KaggleApi
+
     try:
         # Ensure output directory exists
+        output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
         # Set Kaggle credentials from environment variables or command-line arguments

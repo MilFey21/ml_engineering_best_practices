@@ -1,0 +1,20 @@
+# @package _global_
+
+defaults:
+  - model: random_forest
+  - training: default
+  - data: default
+  - _self_
+
+# Общие настройки проекта
+project:
+  name: churn_prediction
+  random_state: 42
+
+# Пути к данным
+paths:
+  raw_data: data/raw/customer_churn.csv
+  features: data/processed/features.csv
+  labels: data/processed/labels.csv
+  models_dir: models
+  reports_dir: reports

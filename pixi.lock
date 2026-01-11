@@ -10001,7 +10001,7 @@ packages:
 - pypi: ./
   name: src
   version: 0.0.1
-  sha256: e6a7af425840f0bf10844de5d1edb06d0a5c14ec08f629e59704c11e2a22b0c8
+  sha256: cd4cb3fd230c47ce51a4bcaa721205041ab14753f66afb680b922e2c7c3c179e
   requires_python: ~=3.12.0
   editable: true
 - conda: https://conda.anaconda.org/conda-forge/noarch/stack_data-0.6.3-pyhd8ed1ab_1.conda

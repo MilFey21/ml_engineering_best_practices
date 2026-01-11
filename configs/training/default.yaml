@@ -1,0 +1,8 @@
+# @package _global_
+
+# Настройки обучения
+training:
+  experiment_name: churn_prediction
+  mlflow_tracking_uri: file:./mlruns
+  save_model: true
+  log_metrics: true

@@ -1,7 +1,54 @@
 site_name: ml_engineering_best_practices
 site_author: Your name (or your organization/company/team)
+site_url: https://milfey21.github.io/ml_engineering_best_practices/
+repo_url: https://github.com/milfey21/ml_engineering_best_practices
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: true
+            show_root_heading: false
+            show_docstring_modules: false
+            show_submodules: false
+            heading_level: 3
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
+  - API:
+    - API Overview: api/overview.md
+    - Models API: api/models.md
+    - Utils API: api/utils.md
+  - Experiments:
+    - Results: experiments/results.md
   - Reproducibility: reproducibility.md

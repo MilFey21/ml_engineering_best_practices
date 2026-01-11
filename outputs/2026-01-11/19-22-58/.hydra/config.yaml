@@ -1,0 +1,27 @@
+model:
+  _target_: sklearn.ensemble.GradientBoostingClassifier
+  n_estimators: 100
+  max_depth: 5
+  learning_rate: 0.1
+  random_state: ${project.random_state}
+model_name: gradient_boosting
+model_path: models/gb_model.pkl
+metrics_path: models/gb_metrics.json
+training:
+  experiment_name: churn_prediction
+  mlflow_tracking_uri: file:./mlruns
+  save_model: true
+  log_metrics: true
+data:
+  test_size: 0.2
+  random_state: 42
+  stratify: true
+project:
+  name: churn_prediction
+  random_state: 42
+paths:
+  raw_data: data/raw/customer_churn.csv
+  features: data/processed/features.csv
+  labels: data/processed/labels.csv
+  models_dir: models
+  reports_dir: reports
