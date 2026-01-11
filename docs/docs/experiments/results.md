@@ -89,6 +89,17 @@ reports/
 - Визуализация метрик для лучших экспериментов
 - Фильтрация по уникальным именам экспериментов
 
+## Публикация отчетов на GitHub Pages
+
+Отчеты об экспериментах автоматически публикуются на GitHub Pages и доступны по адресу:
+
+- [Общий отчет экспериментов](results/experiment_report.md)
+- [Сводный отчет](results/experiment_report_summary_20251226_212741.md)
+- [Отчет по Accuracy](results/experiment_report_accuracy_20251226_212741.md)
+- [Отчет по F1-Score](results/experiment_report_f1_20251226_212741.md)
+
+Все отчеты доступны по адресу: `https://milfey21.github.io/ml_engineering_best_practices/experiments/results/`
+
 ## Воспроизводимость
 
 Для воспроизведения результатов см. [Инструкции по воспроизведению](../reproducibility/instructions.md).

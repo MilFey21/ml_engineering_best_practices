@@ -10,6 +10,7 @@ on:
       - 'docs/**'
       - 'docs/mkdocs.yml'
       - '.github/workflows/docs.yml'
+      - 'reports/experiments/**'
   pull_request:
     branches:
       - main
@@ -18,6 +19,7 @@ on:
     paths:
       - 'docs/**'
       - 'docs/mkdocs.yml'
+      - 'reports/experiments/**'
   workflow_dispatch:
 
 permissions:
@@ -44,6 +46,12 @@ jobs:
       - name: Install dependencies
         run: |
           pip install mkdocs mkdocs-material mkdocstrings[python] pymdown-extensions
+
+      - name: Copy experiment reports
+        run: |
+          mkdir -p docs/docs/experiments/results
+          cp -r reports/experiments/*.md docs/docs/experiments/results/ 2>/dev/null || true
+          cp -r reports/experiments/plots docs/docs/experiments/results/ 2>/dev/null || true
 
       - name: Build documentation
         working-directory: ./docs
