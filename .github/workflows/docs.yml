@@ -1,0 +1,96 @@
+name: Deploy Documentation
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - hw_6
+    paths:
+      - 'docs/**'
+      - 'docs/mkdocs.yml'
+      - '.github/workflows/docs.yml'
+      - 'reports/experiments/**'
+  pull_request:
+    branches:
+      - main
+      - master
+      - hw_6
+    paths:
+      - 'docs/**'
+      - 'docs/mkdocs.yml'
+      - 'reports/experiments/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install mkdocs dependencies
+        run: |
+          pip install mkdocs mkdocs-material mkdocstrings[python] pymdown-extensions
+
+      - name: Install project dependencies
+        run: |
+          pip install numpy==1.26.4 pandas==2.2.1 scikit-learn==1.4.2 joblib matplotlib seaborn loguru typer pydantic hydra-core omegaconf python-dotenv clearml mlflow tqdm
+
+      - name: Install src package in editable mode
+        run: |
+          pip install -e .
+
+      - name: Verify src module can be imported
+        run: |
+          python -c "import src; print('src module imported successfully')"
+          python -c "from src import config; print('src.config imported successfully')"
+
+      - name: Copy experiment reports
+        run: |
+          mkdir -p docs/docs/experiments/results
+          cp -r reports/experiments/*.md docs/docs/experiments/results/ 2>/dev/null || true
+          cp -r reports/experiments/plots docs/docs/experiments/results/ 2>/dev/null || true
+
+      - name: Build documentation
+        working-directory: ./docs
+        run: |
+          mkdocs build --verbose
+
+      - name: Create .nojekyll file
+        run: |
+          touch ./docs/site/.nojekyll
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs/site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || github.ref == 'refs/heads/hw_6')
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

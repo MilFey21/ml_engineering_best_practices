@@ -1,7 +1,82 @@
 site_name: ml_engineering_best_practices
-site_author: Your name (or your organization/company/team)
+site_author: MilFey21
+site_url: https://milfey21.github.io/ml_engineering_best_practices/
+repo_url: https://github.com/MilFey21/ml_engineering_best_practices
+repo_name: MilFey21/ml_engineering_best_practices
+
+docs_dir: docs
+site_dir: site
+use_directory_urls: true
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.annotate
+    - content.code.copy
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - tables
+  - attr_list
+  - md_in_html
 
 nav:
   - Home: index.md
   - Getting Started: getting-started.md
-  - Reproducibility: reproducibility.md
+  - Deployment: deployment.md
+  - API:
+      - api/overview.md
+      - api/models.md
+      - api/utils.md
+  - Experiments:
+      - experiments/results.md
+  - Reproducibility:
+      - reproducibility/instructions.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [..]
+          options:
+            docstring_style: google
+            show_source: true
+            selection:
+              filters:
+                - "!^_[^_]"
+            rendering:
+              show_source: true
+              show_root_heading: true
+              show_root_toc_entry: true

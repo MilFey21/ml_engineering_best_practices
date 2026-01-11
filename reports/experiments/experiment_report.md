@@ -1,0 +1,107 @@
+# Experiment Report
+
+Generated automatically from ClearML experiments.
+
+## Project: Churn Prediction Experiments
+
+## Top Models by Metrics
+
+### Top 10 Experiments by test_f1_score
+
+| Task Name | test_f1_score | Task ID |
+|-----------|---------------|----------|
+| rf_n100_d8 | 0.6332 | 2c4bae3e... |
+| rf_n50_d5 | 0.6213 | 5455e20a... |
+| lr_c1 | 0.6170 | 25b5055a... |
+| lr_c10 | 0.6155 | a0fb73f1... |
+| rf_enhanced_n300_d15 | 0.6129 | 74b05f3a... |
+| lr_c01 | 0.6119 | 76e6eac2... |
+| rf_n200_d10 | 0.6079 | 110aea66... |
+| rf_n150_d12 | 0.6048 | 8a6ddb71... |
+| gb_n150_d5_lr005 | 0.5856 | 7baae013... |
+| dt_d10 | 0.5822 | d5d208d3... |
+
+
+### Top 5 Experiments by test_accuracy
+
+| Task Name | test_accuracy | Task ID |
+|-----------|---------------|----------|
+| gb_n50_d3_lr01 | 0.8027 | 0b6e2ce3... |
+| gb_n100_d5_lr01 | 0.7949 | 5b29847e... |
+| gb_enhanced_n200_d7_lr005 | 0.7906 | 652de620... |
+| knn_k10 | 0.7878 | c276b00d... |
+| rf_n100_unlimited | 0.7850 | 015f0308... |
+
+
+### Top 1 Experiments by test_precision
+
+| Task Name | test_precision | Task ID |
+|-----------|----------------|----------|
+| knn_k5 | 0.5760 | 53b11bf5... |
+
+
+### Top 1 Experiments by test_recall
+
+| Task Name | test_recall | Task ID |
+|-----------|-------------|----------|
+| svm_rbf_c1 | 1.0000 | f494e00f... |
+
+
+### Top 10 Experiments by test_roc_auc
+
+| Task Name | test_roc_auc | Task ID |
+|-----------|--------------|----------|
+| gb_n50_d3_lr01 | 0.8460 | 0b6e2ce3... |
+| rf_n100_d8 | 0.8419 | 2c4bae3e... |
+| rf_n50_d5 | 0.8406 | 5455e20a... |
+| lr_c1 | 0.8397 | 25b5055a... |
+| lr_c01 | 0.8394 | 76e6eac2... |
+| lr_c10 | 0.8393 | a0fb73f1... |
+| rf_n200_d10 | 0.8375 | 110aea66... |
+| gb_n150_d5_lr005 | 0.8374 | 7baae013... |
+| rf_enhanced_n300_d15 | 0.8368 | 74b05f3a... |
+| gb_n100_d5_lr01 | 0.8351 | 5b29847e... |
+
+
+## Visualizations
+
+### Training Metrics Plots
+
+#### knn_k10 (ID: c276b00d12ce42c0841653fc0c9a11e9) - Best by test_precision
+
+**Combined Metrics**
+
+![Combined Metrics Plot](plots/task_c276b00d12ce42c0841653fc0c9a11e9/combined_metrics.png)
+
+#### svm_rbf_c1 (ID: f494e00fef58442a8f62a5836ac350cb) - Best by test_recall
+
+**Combined Metrics**
+
+![Combined Metrics Plot](plots/task_f494e00fef58442a8f62a5836ac350cb/combined_metrics.png)
+
+#### gb_n100_d5_lr01 (ID: 5b29847efb0e4b739d87a686e6682dc3) - Best by test_accuracy
+
+**Combined Metrics**
+
+![Combined Metrics Plot](plots/task_5b29847efb0e4b739d87a686e6682dc3/combined_metrics.png)
+
+#### rf_n100_d8 (ID: 2c4bae3eb82441c7a9526ac033c53476) - Best by test_f1_score
+
+**Combined Metrics**
+
+![Combined Metrics Plot](plots/task_2c4bae3eb82441c7a9526ac033c53476/combined_metrics.png)
+
+## Notes
+
+- Reports are generated automatically from ClearML experiments
+- Metrics are extracted from the last scalar metrics or task parameters
+- Models are sorted by the specified metric in descending order
+- Plots are downloaded from ClearML tasks and embedded in the report
+
+## Reproducibility
+
+To reproduce these results:
+
+1. Ensure ClearML Server is running: `pixi run clearml-server-start`
+2. Run experiments: `pixi run churn-experiments`
+3. View results in ClearML UI: http://localhost:8080
