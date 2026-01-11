@@ -5,27 +5,17 @@
 ## Модуль dataset
 
 ::: src.dataset
+    options:
+      show_source: true
 
 ## Модуль features
 
 ::: src.features
+    options:
+      show_source: true
 
 ## Модуль plots
 
 ::: src.plots
-
-## Модуль churn_prediction.data_versioning
-
-::: src.churn_prediction.data_versioning
-
-## Модуль churn_prediction.model_registry
-
-::: src.churn_prediction.model_registry
-
-## Модуль churn_prediction.pipeline
-
-::: src.churn_prediction.pipeline
-
-## Модуль pipeline.monitor
-
-::: src.pipeline.monitor
+    options:
+      show_source: true

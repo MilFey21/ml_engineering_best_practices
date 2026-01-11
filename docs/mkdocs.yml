@@ -69,7 +69,14 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          paths: [../src]
+          paths: [..]
           options:
             docstring_style: google
             show_source: true
+            selection:
+              filters:
+                - "!^_[^_]"
+            rendering:
+              show_source: true
+              show_root_heading: true
+              show_root_toc_entry: true
