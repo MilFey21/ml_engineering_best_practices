@@ -53,6 +53,8 @@ jobs:
 
       - name: Build with MkDocs
         working-directory: ./docs
+        env:
+          PYTHONPATH: ${{ github.workspace }}
         run: mkdocs build
 
       - name: Upload artifact
