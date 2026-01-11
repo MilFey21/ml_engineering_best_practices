@@ -1,3 +1,8 @@
+"""Training module for baseline Random Forest model.
+
+This module provides functionality to train a Random Forest classifier
+for customer churn prediction with MLflow integration for experiment tracking.
+"""
 from pathlib import Path
 
 import joblib
@@ -37,7 +42,22 @@ def main(
     experiment_name: str = "churn_prediction",
     run_name: str = None,
 ):
-    """Train a baseline Random Forest model for customer churn prediction."""
+    """Train a baseline Random Forest model for customer churn prediction.
+
+    Args:
+        features_path: Path to the features CSV file.
+        labels_path: Path to the labels CSV file.
+        model_path: Path where the trained model will be saved.
+        test_size: Proportion of dataset to include in the test split (default: 0.2).
+        random_state: Random seed for reproducibility (default: 42).
+        n_estimators: Number of trees in the forest (default: 100).
+        max_depth: Maximum depth of the tree (default: 8).
+        experiment_name: Name of the MLflow experiment (default: "churn_prediction").
+        run_name: Optional name for the MLflow run.
+
+    Returns:
+        None. The trained model is saved to model_path and logged to MLflow.
+    """
     # Set MLflow tracking URI (defaults to local ./mlruns)
     mlflow.set_tracking_uri("file:./mlruns")
     mlflow.set_experiment(experiment_name)

@@ -36,7 +36,19 @@ MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def create_model(model_type: str, params: Dict[str, Any], random_state: int = 42):
-    """Create a model instance based on model type and parameters."""
+    """Create a model instance based on model type and parameters.
+
+    Args:
+        model_type: Type of model to create (e.g., "random_forest", "gradient_boosting").
+        params: Dictionary of model parameters.
+        random_state: Random seed for reproducibility.
+
+    Returns:
+        Instantiated sklearn model object.
+
+    Raises:
+        ValueError: If model_type is not supported.
+    """
     model_configs = {
         "random_forest": RandomForestClassifier,
         "gradient_boosting": GradientBoostingClassifier,
@@ -77,7 +89,22 @@ def train_and_log_experiment(
     random_state: int = 42,
     tags: Optional[List[str]] = None,
 ):
-    """Train a model and log experiment to ClearML."""
+    """Train a model and log experiment to ClearML.
+
+    Args:
+        model_type: Type of model to train.
+        model_params: Dictionary of model hyperparameters.
+        features_path: Path to features CSV file.
+        labels_path: Path to labels CSV file.
+        project_name: Name of ClearML project.
+        task_name: Optional name for the ClearML task.
+        test_size: Proportion of data to use for testing.
+        random_state: Random seed for reproducibility.
+        tags: Optional list of tags for the experiment.
+
+    Returns:
+        Dictionary containing task_id and metrics (accuracy, F1-score, etc.).
+    """
     # Generate task name if not provided
     exp_task_name = task_name or f"{model_type}_{id(model_params)}"
 
@@ -332,7 +359,20 @@ def run_experiments(
     labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
     project_name: str = "Churn Prediction Experiments",
 ):
-    """Run multiple experiments with different models and hyperparameters."""
+    """Run multiple experiments with different models and hyperparameters.
+
+    Executes a series of experiments with various model types and configurations,
+    logging all results to ClearML. Includes experiments with Random Forest,
+    Gradient Boosting, Logistic Regression, SVM, KNN, Decision Tree, and AdaBoost.
+
+    Args:
+        features_path: Path to features CSV file.
+        labels_path: Path to labels CSV file.
+        project_name: Name of ClearML project for experiments.
+
+    Returns:
+        List of dictionaries containing results for each experiment.
+    """
     experiments = []
 
     # Random Forest experiments (5 experiments)

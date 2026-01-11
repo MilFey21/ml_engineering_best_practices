@@ -1,3 +1,8 @@
+"""Dataset download module.
+
+This module provides functionality to download the Telco Customer Churn
+dataset from Kaggle using the Kaggle API.
+"""
 import os
 from pathlib import Path
 from typing import Optional
@@ -21,8 +26,21 @@ def main(
 ):
     """Download Telco Customer Churn dataset from Kaggle.
 
-    Can use environment variables KAGGLE_USERNAME and KAGGLE_KEY,
-    or pass them as command-line arguments.
+    Downloads the Telco Customer Churn dataset from Kaggle and saves it
+    to the specified output path. Credentials can be provided via environment
+    variables (KAGGLE_USERNAME and KAGGLE_KEY) or as command-line arguments.
+
+    Args:
+        output_path: Path where the downloaded dataset will be saved.
+        kaggle_username: Optional Kaggle username (defaults to KAGGLE_USERNAME env var).
+        kaggle_key: Optional Kaggle API key (defaults to KAGGLE_KEY env var).
+
+    Returns:
+        None. Dataset is saved to output_path.
+
+    Raises:
+        FileNotFoundError: If no CSV file is found in the downloaded dataset.
+        Exception: If Kaggle API authentication fails.
     """
     logger.info("Downloading Telco Customer Churn dataset from Kaggle...")
 

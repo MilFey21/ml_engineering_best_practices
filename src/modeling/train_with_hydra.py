@@ -25,7 +25,17 @@ MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def validate_config(cfg: DictConfig) -> None:
-    """Validate configuration using Hydra's validation capabilities."""
+    """Validate configuration using Hydra's validation capabilities.
+
+    Args:
+        cfg: Hydra configuration object to validate.
+
+    Raises:
+        AssertionError: If configuration values are invalid.
+
+    Returns:
+        None.
+    """
     # Hydra автоматически валидирует структуру конфигурации
     # Дополнительная валидация значений
     assert cfg.data.test_size > 0 and cfg.data.test_size < 1, "test_size must be between 0 and 1"
@@ -37,7 +47,14 @@ def validate_config(cfg: DictConfig) -> None:
 
 
 def instantiate_model(cfg: DictConfig):
-    """Instantiate model using Hydra's instantiate functionality."""
+    """Instantiate model using Hydra's instantiate functionality.
+
+    Args:
+        cfg: Hydra configuration object containing model parameters.
+
+    Returns:
+        Instantiated model object (sklearn classifier).
+    """
     # Используем Hydra для создания объекта модели из конфигурации
     model = hydra.utils.instantiate(cfg.model)
     logger.info(f"Instantiated model: {type(model).__name__}")
@@ -47,7 +64,17 @@ def instantiate_model(cfg: DictConfig):
 
 @hydra.main(version_base=None, config_path="../../configs", config_name="config")
 def main(cfg: DictConfig) -> None:
-    """Main training function using Hydra for configuration management."""
+    """Main training function using Hydra for configuration management.
+
+    Trains a model using configuration from Hydra config files. Logs metrics
+    to MLflow and saves the trained model and metrics to disk.
+
+    Args:
+        cfg: Hydra configuration object containing all training parameters.
+
+    Returns:
+        None. Model and metrics are saved to paths specified in config.
+    """
     # Hydra автоматически инициализирует конфигурацию из файлов
     logger.info("=" * 50)
     logger.info("Training with Hydra Configuration")

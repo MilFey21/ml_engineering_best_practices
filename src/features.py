@@ -1,3 +1,9 @@
+"""Feature engineering module.
+
+This module provides functionality to process raw customer churn data,
+handle missing values, encode categorical variables, and create features
+ready for model training.
+"""
 from pathlib import Path
 
 from loguru import logger
@@ -18,7 +24,20 @@ def main(
     features_path: Path = typer.Argument(PROCESSED_DATA_DIR / "features.csv", help="Path to output features CSV file"),
     labels_path: Path = typer.Argument(PROCESSED_DATA_DIR / "labels.csv", help="Path to output labels CSV file"),
 ):
-    """Process raw data and create features for modeling."""
+    """Process raw data and create features for modeling.
+
+    Processes raw customer churn data by handling missing values, encoding
+    categorical variables, and separating features from labels. The processed
+    features are saved as a CSV file ready for model training.
+
+    Args:
+        input_path: Path to the raw input CSV file.
+        features_path: Path where processed features will be saved.
+        labels_path: Path where processed labels will be saved.
+
+    Returns:
+        None. Features and labels are saved to the specified paths.
+    """
     logger.info(f"Loading data from {input_path}...")
     df = pd.read_csv(input_path)
 

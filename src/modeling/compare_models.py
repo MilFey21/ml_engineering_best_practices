@@ -1,4 +1,8 @@
-"""Compare multiple trained models."""
+"""Compare multiple trained models.
+
+This module provides functionality to compare metrics from different
+trained models and generate comparison reports in JSON and Markdown formats.
+"""
 import json
 from pathlib import Path
 from typing import Dict, List
@@ -12,7 +16,15 @@ REPORTS_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def compare_models() -> None:
-    """Compare metrics from different models."""
+    """Compare metrics from different trained models.
+
+    Loads metrics from multiple model files and creates comparison reports
+    in both JSON and Markdown formats. The comparison includes metrics such as
+    accuracy, F1-score, and ROC-AUC.
+
+    Returns:
+        None. Comparison results are saved to the reports directory.
+    """
     logger.info("Comparing models...")
     
     models_dir = Path("models")
