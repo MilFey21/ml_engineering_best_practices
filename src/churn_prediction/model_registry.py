@@ -3,13 +3,37 @@
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from clearml import InputModel, OutputModel, Task
-from clearml.backend_api.session import Session
-from loguru import logger
+try:
+    from clearml import InputModel, OutputModel, Task
+    from clearml.backend_api.session import Session
+    CLEARML_AVAILABLE = True
+except ImportError:
+    CLEARML_AVAILABLE = False
+    # Dummy classes for type hints when clearml is not available
+    InputModel = None  # type: ignore
+    OutputModel = None  # type: ignore
+    Task = None  # type: ignore
+    Session = None  # type: ignore
+
+try:
+    from loguru import logger
+except ImportError:
+    import logging
+    logger = logging.getLogger(__name__)
 
 # Import local config setup to ensure environment variables are set
-from src.churn_prediction import clearml_local_config  # noqa: F401
-from src.churn_prediction.config import ChurnPredictionConfig
+try:
+    from src.churn_prediction import clearml_local_config  # noqa: F401
+except ImportError:
+    pass
+
+try:
+    from src.churn_prediction.config import ChurnPredictionConfig
+except ImportError:
+    # Dummy class for type hints when config is not available
+    class ChurnPredictionConfig:  # type: ignore
+        def __init__(self):
+            self.clearml_project = "Churn Prediction"
 
 
 def register_model(
