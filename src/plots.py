@@ -3,6 +3,7 @@
 This module provides functionality to generate plots and visualizations
 from processed data for analysis and reporting.
 """
+
 from pathlib import Path
 
 from loguru import logger

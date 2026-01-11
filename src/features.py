@@ -4,6 +4,7 @@ This module provides functionality to process raw customer churn data,
 handle missing values, encode categorical variables, and create features
 ready for model training.
 """
+
 from pathlib import Path
 
 from loguru import logger
@@ -20,9 +21,15 @@ PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
 
 @app.command()
 def main(
-    input_path: Path = typer.Argument(RAW_DATA_DIR / "customer_churn.csv", help="Path to input CSV file"),
-    features_path: Path = typer.Argument(PROCESSED_DATA_DIR / "features.csv", help="Path to output features CSV file"),
-    labels_path: Path = typer.Argument(PROCESSED_DATA_DIR / "labels.csv", help="Path to output labels CSV file"),
+    input_path: Path = typer.Argument(
+        RAW_DATA_DIR / "customer_churn.csv", help="Path to input CSV file"
+    ),
+    features_path: Path = typer.Argument(
+        PROCESSED_DATA_DIR / "features.csv", help="Path to output features CSV file"
+    ),
+    labels_path: Path = typer.Argument(
+        PROCESSED_DATA_DIR / "labels.csv", help="Path to output labels CSV file"
+    ),
 ):
     """Process raw data and create features for modeling.
 

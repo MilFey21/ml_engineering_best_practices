@@ -3,6 +3,7 @@
 This module provides functionality to train a Random Forest classifier
 for customer churn prediction with MLflow integration for experiment tracking.
 """
+
 from pathlib import Path
 
 import joblib

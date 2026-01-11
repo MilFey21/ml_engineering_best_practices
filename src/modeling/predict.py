@@ -3,6 +3,7 @@
 This module provides functionality to perform inference using trained models
 for customer churn prediction.
 """
+
 from pathlib import Path
 
 from loguru import logger
