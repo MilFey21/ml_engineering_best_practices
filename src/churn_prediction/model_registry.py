@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional
 try:
     from clearml import InputModel, OutputModel, Task
     from clearml.backend_api.session import Session
+
     CLEARML_AVAILABLE = True
 except ImportError:
     CLEARML_AVAILABLE = False
@@ -19,6 +20,7 @@ try:
     from loguru import logger
 except ImportError:
     import logging
+
     logger = logging.getLogger(__name__)
 
 # Import local config setup to ensure environment variables are set
@@ -402,107 +404,14 @@ def register_existing_model(
 def main():
     """Main function."""
     import sys
-
-    # If no arguments provided, default to list command
-    if len(sys.argv) == 1:
-        # No command specified, run list by default
-        config = ChurnPredictionConfig()
-        list_models(config.clearml_project)
-        return
-
-    # Handle command-line arguments manually for compare command
-    # This is a workaround for ClearML's click patching that interferes with typer
-    if len(sys.argv) > 1 and sys.argv[1] == "compare":
-        try:
-            # Parse arguments manually
-            metric_name = "test_f1_score"
-            top_n = 5
-            project_name = None
-
-            i = 2
-            while i < len(sys.argv):
-                arg = sys.argv[i]
-                if arg in ["--metric-name", "--metric_name", "-m"]:
-                    if i + 1 < len(sys.argv):
-                        metric_name = sys.argv[i + 1]
-                        i += 2
-                    else:
-                        i += 1
-                elif arg in ["--top-n", "--top_n", "-n"]:
-                    if i + 1 < len(sys.argv):
-                        top_n = int(sys.argv[i + 1])
-                        i += 2
-                    else:
-                        i += 1
-                elif arg in ["--project-name", "--project_name", "-p"]:
-                    if i + 1 < len(sys.argv):
-                        project_name = sys.argv[i + 1]
-                        i += 2
-                    else:
-                        i += 1
-                else:
-                    # Try to parse as value if it looks like a value
-                    if arg and not arg.startswith("-"):
-                        # This might be a value without option name
-                        if metric_name == "test_f1_score" and "f1" in arg.lower():
-                            metric_name = arg
-                        elif isinstance(top_n, int) and top_n == 5 and arg.isdigit():
-                            top_n = int(arg)
-                    i += 1
-
-            # Call compare function directly
-            config = ChurnPredictionConfig()
-            proj_name = project_name or config.clearml_project
-
-            results = compare_models(
-                project_name=proj_name,
-                metric_name=metric_name,
-                top_n=top_n,
-            )
-
-            if not results:
-                logger.info("No models found with the specified metric")
-                return
-
-            import json
-
-            from rich.console import Console
-            from rich.table import Table
-
-            console = Console()
-            table = Table(title=f"Top {len(results)} Models by {metric_name}")
-            table.add_column("Model Name", style="cyan")
-            table.add_column(metric_name, style="magenta", justify="right")
-            table.add_column("Task Name", style="green")
-            table.add_column("Tags", style="yellow")
-
-            for result in results:
-                tags_str = ", ".join(result.get("tags", []))[:30] or "None"
-                table.add_row(
-                    result["model_name"],
-                    f"{result[metric_name]:.4f}",
-                    result["task_name"],
-                    tags_str,
-                )
-
-            console.print(table)
-            logger.info("\nDetailed results (JSON):")
-            logger.info(json.dumps(results, indent=2, default=str))
-            return
-        except Exception as e:
-            # If manual parsing fails, log error and continue to typer
-            logger.debug(f"Manual parsing failed, falling back to typer: {e}")
-            pass
-
-    # Use typer for command-line interface
     import typer
 
     app = typer.Typer(help="ClearML Model Registry CLI")
+    config = ChurnPredictionConfig()
 
     @app.command()
     def list():
         """List all models in registry."""
-        config = ChurnPredictionConfig()
         list_models(config.clearml_project)
 
     @app.command()
@@ -522,13 +431,10 @@ def main():
     ):
         """Compare models by metrics."""
         import json
-
         from rich.console import Console
         from rich.table import Table
 
-        config = ChurnPredictionConfig()
         proj_name = project_name or config.clearml_project
-
         results = compare_models(
             project_name=proj_name,
             metric_name=metric_name,
@@ -559,9 +465,10 @@ def main():
         logger.info("\nDetailed results (JSON):")
         logger.info(json.dumps(results, indent=2, default=str))
 
-    # Only call typer if manual parsing didn't handle the command
-    # (compare command is handled manually above, before typer app creation)
-    if not (len(sys.argv) > 1 and sys.argv[1] == "compare"):
+    # Default to list if no command provided
+    if len(sys.argv) == 1:
+        list_models(config.clearml_project)
+    else:
         app()
 
 

@@ -248,57 +248,175 @@ top_models = compare_models(
 - **Сравнение моделей по метрикам для выбора лучшей модели**
 - Интеграция с CI/CD пайплайнами
 
-### 4.3 Создание пайплайнов обучения и деплоя
+### 4.3 Создание и запуск пайплайнов
 
 ![ClearML](figures/pipeline_ui.png)
 
-Создан модуль `src/churn_prediction/pipeline.py` для создания пайплайнов:
+Создан модуль `src/churn_prediction/pipeline.py` для создания и запуска ClearML пайплайнов.
 
-**Функциональность:**
-- Создание пайплайна обучения через `PipelineController`
-- Создание пайплайна деплоя
-- Управление зависимостями между шагами
-- Автоматический запуск пайплайнов
+**Пайплайн включает следующие шаги:**
+1. **download_data** - загрузка датасета
+2. **create_features** - создание признаков (зависит от шага 1)
+3. **train_model** - обучение модели (зависит от шага 2)
 
-**Пайплайн обучения включает:**
-1. Загрузка датасета
-2. Создание признаков
-3. Обучение модели
-4. Регистрация модели
+**Запуск пайплайна:**
 
-**Пайплайн деплоя включает:**
-1. Загрузка модели из реестра
-2. Деплой модели
-
-**Пример использования:**
-```python
-from src.churn_prediction.pipeline import main
-from src.churn_prediction.config import ChurnPredictionConfig
-
-# Автоматически создает и запускает пайплайны
-main()
-
-# Или программно:
-from src.churn_prediction.pipeline import create_training_pipeline, create_template_tasks
-
-config = ChurnPredictionConfig()
-template_tasks = create_template_tasks(config)
-training_pipeline = create_training_pipeline(config, template_tasks)
-training_pipeline.queue()  # Автоматически ставит в очередь
+```bash
+pixi run churn-pipeline
 ```
 
-**Автоматический запуск:**
-Функция `main()` в `src/churn_prediction/pipeline.py` автоматически:
-1. Создает template tasks для всех шагов пайплайна
-2. Создает пайплайн обучения
-3. Автоматически ставит пайплайн в очередь через `training_pipeline.queue()`
-4. Пайплайн будет выполнен ClearML Agent при его наличии
+Команда создает и запускает пайплайн в ClearML. Пайплайн автоматически ставится в очередь и будет выполнен ClearML Agent при его наличии.
+
+**Скриншот запуска пайплайна через терминал:**
+
+![ClearML Pipeline Run](figures/pipeline_run.png)
+
+*Скриншот показывает выполнение команды `pixi run churn-pipeline` и вывод информации о созданном пайплайне.*
+
+**Просмотр пайплайна в ClearML UI:**
+
+После запуска пайплайн доступен в ClearML Web UI:
+- Перейдите в раздел **Pipelines**
+- Выберите проект "Churn Prediction"
+- Просмотрите статус выполнения и логи каждого шага
+
+![ClearML Pipeline UI](figures/pipeline_ui.png)
+
+**Структура пайплайна:**
+
+![ClearML Pipeline Structure](figures/pipeline.png)
+
+**Детали выполнения пайплайна:**
+
+![ClearML Pipeline Tasks](figures/pipeline_running.png)
 
 **Преимущества:**
-- Автоматизация всего процесса обучения и деплоя
+- Автоматизация ML workflow
 - Управление зависимостями между шагами
-- Воспроизводимость пайплайнов
-- Интеграция с ClearML UI для визуализации
+- Воспроизводимость экспериментов
+- Визуализация выполнения в ClearML UI
+
+### 4.4 Автоматический запуск пайплайнов
+
+Создан модуль `src/churn_prediction/pipeline_scheduler.py` для автоматического запуска пайплайнов.
+
+**Примечание:** ClearML Enterprise версия предоставляет встроенный Task Scheduler через UI. Данный модуль предназначен для:
+- Пользователей open-source версии ClearML
+- Кастомных требований к планированию
+- Интеграции с внешними системами планирования (cron, systemd, Windows Task Scheduler)
+
+**Реализованные возможности:**
+
+1. **Интервальное планирование (Interval Scheduling):**
+   - Запуск пайплайна через заданные интервалы времени
+   - Настраиваемый интервал в секундах
+   - Поддержка ограничения количества запусков
+
+2. **Ежедневное планирование (Daily Scheduling):**
+   - Запуск пайплайна в определенное время каждый день
+   - Формат времени: HH:MM (например, "00:00" для полуночи)
+
+**Использование:**
+
+```bash
+# Интервальное планирование (каждый час)
+pixi run churn-pipeline-scheduler interval 3600
+
+# Ежедневное планирование (в полночь)
+pixi run churn-pipeline-scheduler daily 00:00
+
+# С ограничением количества запусков (Linux/Mac)
+PIPELINE_MAX_RUNS=10 pixi run churn-pipeline-scheduler interval 3600
+
+# С ограничением количества запусков (Windows PowerShell)
+$env:PIPELINE_MAX_RUNS=10; pixi run churn-pipeline-scheduler interval 3600
+
+# Или через аргументы командной строки (работает везде)
+pixi run churn-pipeline-scheduler interval 3600 --max-runs 10
+```
+![ClearML Pipeline Tasks](figures/pipeline_scheduler.png)
+
+**Настройка через переменные окружения:**
+
+**Windows PowerShell:**
+```powershell
+# Тип планирования
+$env:PIPELINE_SCHEDULE_TYPE="interval"
+
+# Интервал в секундах
+$env:PIPELINE_INTERVAL_SECONDS=3600
+
+# Время запуска (для daily)
+$env:PIPELINE_SCHEDULE_TIME="00:00"
+
+# Максимальное количество запусков
+$env:PIPELINE_MAX_RUNS=10
+```
+
+**Альтернативные методы автоматизации:**
+
+1. **Использование cron (Linux/Mac):**
+   ```bash
+   # Добавить в crontab для ежедневного запуска в полночь
+   0 0 * * * cd /path/to/project && pixi run churn-pipeline
+   ```
+
+2. **Использование Task Scheduler (Windows):**
+   - Создать задачу в Планировщике заданий Windows
+   - Указать команду: `pixi run churn-pipeline`
+   - Настроить расписание
+
+3. **Использование systemd (Linux):**
+   - Создать systemd timer для периодического запуска
+
+### 4.5 Система мониторинга выполнения
+
+Создан модуль `src/churn_prediction/pipeline_monitor.py` для мониторинга выполнения пайплайнов.
+
+**Примечание:** ClearML UI уже предоставляет полный мониторинг пайплайнов в реальном времени. Данный модуль добавляет:
+- Автоматические уведомления (файловые и webhook)
+- Интеграцию с внешними системами (Slack, Telegram, email и т.д.)
+- Программный доступ для автоматизации CI/CD
+- Логирование статуса в файлы для анализа
+
+**Функциональность:**
+
+1. **Отслеживание статуса пайплайна:**
+   - Получение текущего статуса пайплайна
+   - Мониторинг статуса каждого шага
+   - Отслеживание изменений статуса в реальном времени
+
+2. **Логирование:**
+   - Автоматическое логирование статуса в файл `pipeline_monitor.log`
+   - Детальная информация о каждом шаге пайплайна
+   - Временные метки для всех событий
+
+3. **Уведомления:**
+   - Автоматические уведомления при завершении пайплайна
+   - Запись уведомлений в файл `pipeline_notifications.log`
+   - Поддержка webhook-уведомлений (через переменную окружения `CLEARML_WEBHOOK_URL`)
+
+**Использование:**
+
+```bash
+# Мониторинг последнего пайплайна
+pixi run churn-pipeline-monitor
+
+# Мониторинг конкретного пайплайна по ID
+pixi run churn-pipeline-monitor <pipeline_id>
+
+# Список всех пайплайнов
+python src/churn_prediction/pipeline_monitor.py list
+```
+
+**Пример вывода:**
+
+```
+[2025-01-11T12:00:00] Pipeline abc123: running
+  Step 'download_data': completed
+  Step 'create_features': running
+  Step 'train_model': pending
+```
 
 ## Результаты
 
@@ -312,7 +430,9 @@ ml_engineering_best_practices/
 │   │   ├── config.py
 │   │   ├── data_versioning.py
 │   │   ├── model_registry.py
-│   │   └── pipeline.py
+│   │   ├── pipeline.py
+│   │   ├── pipeline_monitor.py
+│   │   └── pipeline_scheduler.py
 │   ├── modeling/
 │   │   ├── train.py                  # Обучение с ClearML
 │   │   ├── experiments.py            # Множественные эксперименты
@@ -359,6 +479,9 @@ ml_engineering_best_practices/
 3. **Регистрация моделей**: Использование ClearML Model Registry
 4. **Сравнение экспериментов**: Функции для программного сравнения
 5. **Пайплайны**: Создание и управление пайплайнами через `PipelineController`
+6. **Автоматический запуск**: Планировщик для автоматического выполнения пайплайнов
+7. **Мониторинг**: Система мониторинга выполнения пайплайнов
+8. **Уведомления**: Автоматические уведомления о статусе пайплайнов
 
 ## Использование
 
@@ -526,11 +649,58 @@ pixi run churn-model-registry compare --metric-name test_f1_score --top-n 5
 
 ### 9. Создание и запуск пайплайнов
 
+**Запуск пайплайна:**
+
 ```bash
 pixi run churn-pipeline
 ```
 
-Пайплайны доступны в ClearML Web UI в разделе "Pipelines".
+Команда создает и запускает пайплайн в ClearML. После запуска пайплайн будет виден в ClearML Web UI в разделе "Pipelines".
+
+**Пример вывода:**
+
+```
+[INFO] Starting pipeline...
+[SUCCESS] Pipeline started: <pipeline_id>
+[INFO] Pipeline ID: <pipeline_id>
+[INFO] View pipeline in ClearML UI: http://localhost:8080
+```
+
+**Скриншот запуска пайплайна через терминал:**
+
+![ClearML Pipeline Run](figures/pipeline_run.png)
+
+*Скриншот показывает выполнение команды `pixi run churn-pipeline` и вывод информации о созданном пайплайне (Pipeline ID).*
+
+Пайплайны доступны в ClearML Web UI в разделе "Pipelines", где можно отслеживать статус выполнения каждого шага.
+
+### 9.1 Автоматический запуск пайплайнов
+
+**Запуск планировщика:**
+
+```bash
+# Интервальное планирование (каждый час)
+pixi run churn-pipeline-scheduler interval 3600
+
+# Ежедневное планирование (в полночь)
+pixi run churn-pipeline-scheduler daily 00:00
+```
+
+Планировщик автоматически запускает пайплайны согласно заданному расписанию.
+
+### 9.2 Мониторинг пайплайнов
+
+**Запуск мониторинга:**
+
+```bash
+# Мониторинг последнего пайплайна
+pixi run churn-pipeline-monitor
+
+# Мониторинг конкретного пайплайна
+pixi run churn-pipeline-monitor <pipeline_id>
+```
+
+Мониторинг отслеживает статус выполнения пайплайна и отправляет уведомления при завершении.
 
 ### 10. Просмотр результатов в ClearML UI
 
